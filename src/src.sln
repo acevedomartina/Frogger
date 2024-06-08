@@ -1,0 +1,16 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+Project("{F2A71F9B-5D33-465A-A702-920D77279786}") = "Frogger", "Frogger.fsproj", "{50DA7183-B9C1-4F46-95EF-1A7316CE4FC4}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{50DA7183-B9C1-4F46-95EF-1A7316CE4FC4}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{50DA7183-B9C1-4F46-95EF-1A7316CE4FC4}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{50DA7183-B9C1-4F46-95EF-1A7316CE4FC4}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{50DA7183-B9C1-4F46-95EF-1A7316CE4FC4}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+EndGlobal

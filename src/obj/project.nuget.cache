@@ -1,0 +1,10 @@
+{
+  "version": 2,
+  "dgSpecHash": "DuRxmYoaVbTsvrtch6wiG52NQsIqKDMkMe2EoaqjL+zqbup3xWMlihcza4tiuaEELFMaW+2yJ0oqC91a4/tlpw==",
+  "success": true,
+  "projectFilePath": "C:\\Users\\Propietario\\Desktop\\ib\\5-Maestría\\Programación Avanzada\\Frogger\\src\\Frogger.fsproj",
+  "expectedPackageFiles": [
+    "C:\\Users\\Propietario\\.nuget\\packages\\fsharp.core\\8.0.200\\fsharp.core.8.0.200.nupkg.sha512"
+  ],
+  "logs": []
+}
