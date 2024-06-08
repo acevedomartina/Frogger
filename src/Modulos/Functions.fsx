@@ -67,14 +67,6 @@ module Functions =
         
         else
             return false
-
-    let moveObstacle (obstacle : Obstacle) = 
-        { obstacle with PosX = obstacle.PosX + obstacle.Speed }
-        
-    let obstacle_inside (x_left : int, x_right: int) = 
-
-        let x_left_new : int = (x_left + WIDTH) % WIDTH 
-        let x_right_new : int = (x_right + WIDTH) % WIDTH
         
 
     let moveObstacle (obstacle : Obstacle) = 
@@ -89,3 +81,5 @@ module Functions =
         else
             obstacle
 
+
+    let 
