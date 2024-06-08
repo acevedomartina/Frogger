@@ -6,7 +6,7 @@ module Types =
     type Water = Water
     type Road = Road
     
-    type Final_row =
+    type GoalSpace =
     {
         PosX: int
         Width: int
@@ -26,14 +26,13 @@ module Types =
     | Ten of Water
     | Eleven of Water
     | Twelve of Water
-    | Thirteen of Final_row
+    | Thirteen
 
     type Player =
     {
         PosX: int
         PosY: Rows
         Width: int
-        Water: bool
     }
 
     type Direction =
