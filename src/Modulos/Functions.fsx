@@ -56,6 +56,22 @@ module Functions =
 
     let moveObstacle (obstacle : Obstacle) = 
         { obstacle with PosX = obstacle.PosX + obstacle.Speed }
+        
+    let obstacle_inside (x_left : int, x_right: int) = 
 
-    let moveTurtle (turtle : Turtle) = 
-        { turtle with PosX = turtle.PosX + turtle.Speed }
+        let x_left_new : int = (x_left + WIDTH) % WIDTH 
+        let x_right_new : int = (x_right + WIDTH) % WIDTH
+        
+
+    let moveObstacle (obstacle : Obstacle) = 
+        let x_left_new : int = (obstacle.x_left + WIDTH) % WIDTH 
+        let x_right_new : int = (obstacle.x_right + WIDTH) % WIDTH
+
+        {obstacle with x_left = x_left_new; x_right = x_right_new}
+
+    let state_tortuga(tiempo: int, obstacle: Obstacle) = 
+        if tiempo % 10 = 0 then
+            {obstacle with Underwater = not Underwater}
+        else
+            obstacle
+

@@ -43,7 +43,8 @@ module Types =
 
     type Obstacle =
     {
-        PosX: int
+        x_left: int
+        x_right: int
         PosY: Rows
         Width: int
         Speed: int
@@ -51,7 +52,8 @@ module Types =
 
     type Trurtle = 
     {
-        PosX: int
+        x_left: int
+        x_right: int
         PosY: Rows
         Width: int
         Speed: int
