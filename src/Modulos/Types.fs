@@ -48,20 +48,7 @@ module Types =
         PosY: Rows
         Width: int
         Speed: int
-<<<<<<< HEAD
-    }
-
-    type Trurtle = 
-    {
-        x_left: int
-        x_right: int
-        PosY: Rows
-        Width: int
-        Speed: int
-        Timer: int
-=======
         Underwater: bool
->>>>>>> 7af08e44f36c1bcd39fc09ca64486e6d931f761e
     }
 
     type Game =
