@@ -16,6 +16,10 @@ module Types =
         | Width of int
         | Speed of int
         | Timer of int
+
+    type hola
+        | hola
+    
         | PosX of 
 
     type Obstacle
