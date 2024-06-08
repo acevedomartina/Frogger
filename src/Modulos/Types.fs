@@ -2,21 +2,33 @@
 
 module Types = 
 
-    type Player
-        | PosX of int
-        | PosY of int
-        | Height of int
-        | Width of int
-        | Water of bool
+    type Player =
+    {
+        PosX: int
+        PosY: int
+        Height: int
+        Width: int
+        Water: bool
+    }
 
-    type Turtle
-        | PosX of int
-        | PosY of int
-        | Height of int
-        | Width of int
-        | Speed of int
-        | Timer of int
+    type Move =
+    | Up
+    | Down
+    | Left
+    | Right
 
-    type hola
-        | hola
-    
+    type Obstacle =
+    {
+        PosX: int
+        PosY: int
+        Height: int
+        Width: int
+        Speed: int
+    }
+
+    type Final_row =
+    {
+        PosX: int
+        Width: int
+        Ocupation: bool
+    }
