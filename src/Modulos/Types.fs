@@ -2,16 +2,41 @@
 
 module Types = 
 
+    type Grass = Grass
+    type Water = Water
+    type Road = Road
+    
+    type Final_row =
+    {
+        PosX: int
+        Width: int
+        Ocupation: bool
+    }
+
+    type Rows = 
+    | One of Grass
+    | Two of Road
+    | Three of Road
+    | Four of Road
+    | Five of Road
+    | Six of Road
+    | Seven of Grass
+    | Eight of Water
+    | Nine of Water
+    | Ten of Water
+    | Eleven of Water
+    | Twelve of Water
+    | Thirteen of Final_row
+
     type Player =
     {
         PosX: int
-        PosY: int
-        Height: int
+        PosY: Rows
         Width: int
         Water: bool
     }
 
-    type Move =
+    type Direction =
     | Up
     | Down
     | Left
@@ -20,15 +45,26 @@ module Types =
     type Obstacle =
     {
         PosX: int
-        PosY: int
-        Height: int
+        PosY: Rows
         Width: int
         Speed: int
     }
 
-    type Final_row =
+    type Trurtle = 
     {
         PosX: int
+        PosY: Rows
         Width: int
-        Ocupation: bool
+        Speed: int
+        Timer: int
+    }
+
+    type Game =
+    {
+        Player: Player
+        Obstacles: Obstacle list
+        Final_row: Final_row
+        Sectors: Sector list
+        Score: int
+        GameOver: bool
     }
