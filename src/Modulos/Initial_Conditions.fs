@@ -60,7 +60,6 @@ module Initial_Conditions =
 
     let row10 = [row10_log1]
 
-
     let row11_Turtle1 = { PosX = 100; PosY = Rows.Eleven Water; Width = 60; Speed = 1; Timer = 0}
     let row11_Turtle2 = { PosX = 200; PosY = Rows.Eleven Water; Width = 60; Speed = 1; Timer = 0}
     let row11_Turtle3 = { PosX = 300; PosY = Rows.Eleven; Water; Width = 60; Speed = 1; Timer = 0}

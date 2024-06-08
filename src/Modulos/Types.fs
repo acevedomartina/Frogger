@@ -43,19 +43,12 @@ module Types =
 
     type Obstacle =
     {
-        PosX: int
+        x_left: int
+        x_right: int
         PosY: Rows
         Width: int
         Speed: int
-    }
-
-    type Trurtle = 
-    {
-        PosX: int
-        PosY: Rows
-        Width: int
-        Speed: int
-        Timer: int
+        Underwater: bool
     }
 
     type Game =
