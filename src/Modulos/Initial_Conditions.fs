@@ -5,7 +5,7 @@ module Initial_Conditions =
     open Frogger.Types
     
     //Inicializamos las posiciones del jugador y de los obstaculos
-    //Definimos el centro de la pantalla como el origen de coordenadas
+    //Definimos el extremo lateral izquierdo como el límite
 
     let WIDTH = 800
     let HEIGHT = 600
@@ -59,6 +59,7 @@ module Initial_Conditions =
     let row10_log1 = { PosX = 100; PosY = Rows.Ten Water; Width = 130; Speed = 2}
 
     let row10 = [row10_log1]
+
 
     let row11_Turtle1 = { PosX = 100; PosY = Rows.Eleven Water; Width = 60; Speed = 1; Timer = 0}
     let row11_Turtle2 = { PosX = 200; PosY = Rows.Eleven Water; Width = 60; Speed = 1; Timer = 0}
