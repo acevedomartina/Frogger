@@ -83,3 +83,18 @@ module Initial_Conditions =
 
     let goal_spaces = [space1; space2; space3; space4; space5]
     //luego habrá otro espacio de pasto vacío (len: 30)
+
+    let initFondo = 
+    {
+        Obstacles = row2 @ row3 @ row4 @ row5 @ row6 @ row8 @ row9 @ row10 @ row11 @ row12
+        Time = 60
+    }
+
+    let gameState = 
+    {
+        Player = player
+        Final_row = goal_spaces
+        Score = 0
+        Lifes = ThreeLives
+        Fondo = initFondo
+    }

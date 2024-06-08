@@ -51,12 +51,22 @@ module Types =
         Underwater: bool
     }
 
+    type LivesRemaining =
+    | OneLife
+    | TwoLives
+    | ThreeLives
+
+    type Fondo = 
+    {
+        Obstacles: Obstacle list
+        Time: int
+    }
+
     type Game =
     {
         Player: Player
-        Obstacles: Obstacle list
         Final_row: Final_row
-        Sectors: Sector list
         Score: int
-        GameOver: bool
+        Lifes: LivesRemaining
+        Fondo: Fondo
     }
