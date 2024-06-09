@@ -47,6 +47,7 @@ module Types =
     }
 
     type LivesRemaining =
+    | GameOver
     | OneLife
     | TwoLives
     | ThreeLives

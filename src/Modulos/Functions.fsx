@@ -81,7 +81,7 @@ module Functions =
             obstacle
 
     let updateFondo (fondo : Fondo) = 
-        let newObstacles = List.map moveObstacle fondo.Obstacles
+        let newObstacles = Map.map (moveObstacle fondo.Obstacles)
         let newTime = fondo.Time - 1
         {fondo with Obstacles = newObstacles; Time = newTime}
 
@@ -94,20 +94,43 @@ module Functions =
             | None -> let newObstacles = List.map (moveObstacle game.Fondo.Obstacles)
                       let newFondo = {game.Fondo with Obstacles = newObstacles}
                       {game with Fondo = newFondo}
-        
-    // Chequear si el jugador colisiona con algún obstáculo
-    
+            
     // Chequear si se acabó el tiempo
 
-    // Chequear si se ahogó
+    // Chequear si se ahogó y Chequear si el jugador colisiona con algún obstáculo
 
     // Chequear si llegó a la meta
 
     // Chequear si Ganó el nivel
     
-    let checkPlayerStatus (player : Player) (obstacle : Map<Rows, Obstacle list>) = 
-        let row = player.posY
-        match row with
-        | One -> {player}
-        | Two -> list.map (checkCollision player) (obstacle.[Two]) 
+    let updateLives (game : GameState) = 
+        let lifes = game.Lifes
+        match lifes with
+        | GameOver -> game
+        | OneLife -> {game with Lifes = GameOver}
+        | TwoLives -> {game with Lifes = OneLife}
+        | ThreeLives -> {game with Lifes = TwoLives}
 
+    let checkPlayerLose (game : GameState) =
+        let player = game.Player
+        let PosY = player.PosY
+        match PosY with
+        | One | Seven -> game
+        | Two | Three | Four | Five | Six -> let obstacles = Map.find PosY game.Fondo.Obstacles
+                                            let collision = List.exists (checkCollision player) obstacles
+                                            if collision then
+                                                let newGame = updateLives game
+                                                let newPlayer = {player with PosX = WIDTH/2; PosY = Rows.One}
+                                                {newGame with Player = newPlayer}
+                                            else
+                                                game
+        | Eight | Nine | Ten | Eleven | Twelve -> let obstacles = Map.find PosY game.Fondo.Obstacles
+                                                let drown = List.exists (checkUpLogTurtle player) obstacles
+                                                if drown then
+                                                    let newGame = updateLives game
+                                                    let newPlayer = {player with PosX = WIDTH/2; PosY = Rows.One}
+                                                    {newGame with Player = newPlayer}
+                                                else
+                                                    game
+
+        | Thirteen -> //Chequear si ganó o perdío una vida
