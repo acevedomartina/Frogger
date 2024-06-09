@@ -1,20 +1,20 @@
 {
   "format": 1,
   "restore": {
-    "C:\\Users\\Propietario\\Desktop\\ib\\5-Maestría\\Programación Avanzada\\Frogger\\src\\Frogger.fsproj": {}
+    "C:\\Users\\Martina\\Desktop\\Programación_avanzada\\Frogger\\src\\Frogger.fsproj": {}
   },
   "projects": {
-    "C:\\Users\\Propietario\\Desktop\\ib\\5-Maestría\\Programación Avanzada\\Frogger\\src\\Frogger.fsproj": {
+    "C:\\Users\\Martina\\Desktop\\Programación_avanzada\\Frogger\\src\\Frogger.fsproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "C:\\Users\\Propietario\\Desktop\\ib\\5-Maestría\\Programación Avanzada\\Frogger\\src\\Frogger.fsproj",
+        "projectUniqueName": "C:\\Users\\Martina\\Desktop\\Programación_avanzada\\Frogger\\src\\Frogger.fsproj",
         "projectName": "Frogger",
-        "projectPath": "C:\\Users\\Propietario\\Desktop\\ib\\5-Maestría\\Programación Avanzada\\Frogger\\src\\Frogger.fsproj",
-        "packagesPath": "C:\\Users\\Propietario\\.nuget\\packages\\",
-        "outputPath": "C:\\Users\\Propietario\\Desktop\\ib\\5-Maestría\\Programación Avanzada\\Frogger\\src\\obj\\",
+        "projectPath": "C:\\Users\\Martina\\Desktop\\Programación_avanzada\\Frogger\\src\\Frogger.fsproj",
+        "packagesPath": "C:\\Users\\Martina\\.nuget\\packages\\",
+        "outputPath": "C:\\Users\\Martina\\Desktop\\Programación_avanzada\\Frogger\\src\\obj\\",
         "projectStyle": "PackageReference",
         "configFilePaths": [
-          "C:\\Users\\Propietario\\AppData\\Roaming\\NuGet\\NuGet.Config"
+          "C:\\Users\\Martina\\AppData\\Roaming\\NuGet\\NuGet.Config"
         ],
         "originalTargetFrameworks": [
           "net8.0"

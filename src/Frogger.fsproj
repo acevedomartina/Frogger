@@ -7,7 +7,6 @@
   <ItemGroup>
     <Compile Include="Modulos\Types.fs" />
     <Compile Include="Modulos\Functions.fsx" />
-    <Compile Include="Modulos\Initial_Conditions.fs" />
   </ItemGroup>
 
   <ItemGroup>

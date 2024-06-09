@@ -1079,19 +1079,19 @@
     ]
   },
   "packageFolders": {
-    "C:\\Users\\Propietario\\.nuget\\packages\\": {}
+    "C:\\Users\\Martina\\.nuget\\packages\\": {}
   },
   "project": {
     "version": "1.0.0",
     "restore": {
-      "projectUniqueName": "C:\\Users\\Propietario\\Desktop\\ib\\5-Maestría\\Programación Avanzada\\Frogger\\Test\\Test.fsproj",
+      "projectUniqueName": "C:\\Users\\Martina\\Desktop\\Programación_avanzada\\Frogger\\Test\\Test.fsproj",
       "projectName": "Test",
-      "projectPath": "C:\\Users\\Propietario\\Desktop\\ib\\5-Maestría\\Programación Avanzada\\Frogger\\Test\\Test.fsproj",
-      "packagesPath": "C:\\Users\\Propietario\\.nuget\\packages\\",
-      "outputPath": "C:\\Users\\Propietario\\Desktop\\ib\\5-Maestría\\Programación Avanzada\\Frogger\\Test\\obj\\",
+      "projectPath": "C:\\Users\\Martina\\Desktop\\Programación_avanzada\\Frogger\\Test\\Test.fsproj",
+      "packagesPath": "C:\\Users\\Martina\\.nuget\\packages\\",
+      "outputPath": "C:\\Users\\Martina\\Desktop\\Programación_avanzada\\Frogger\\Test\\obj\\",
       "projectStyle": "PackageReference",
       "configFilePaths": [
-        "C:\\Users\\Propietario\\AppData\\Roaming\\NuGet\\NuGet.Config"
+        "C:\\Users\\Martina\\AppData\\Roaming\\NuGet\\NuGet.Config"
       ],
       "originalTargetFrameworks": [
         "net8.0"
@@ -1104,8 +1104,8 @@
         "net8.0": {
           "targetAlias": "net8.0",
           "projectReferences": {
-            "C:\\Users\\Propietario\\Desktop\\ib\\5-Maestría\\Programación Avanzada\\Frogger\\src\\Frogger.fsproj": {
-              "projectPath": "C:\\Users\\Propietario\\Desktop\\ib\\5-Maestría\\Programación Avanzada\\Frogger\\src\\Frogger.fsproj"
+            "C:\\Users\\Martina\\Desktop\\Programación_avanzada\\Frogger\\src\\Frogger.fsproj": {
+              "projectPath": "C:\\Users\\Martina\\Desktop\\Programación_avanzada\\Frogger\\src\\Frogger.fsproj"
             }
           }
         }
