@@ -1,20 +1,22 @@
 namespace Frogger.Modulos
+open Frogger.Modulos.Types
 
 module Initial_Conditions =
 
-    open Frogger.Modulos.Types
-
     // Inicializamos las posiciones del jugador y de los obstáculos
-    let WIDTH = 800
-    let HEIGHT = 600
+    let WIDTH : int= 800
+    let HEIGHT : int= 600
 
-    let external_width = 100
+    let external_width : int = 100
 
-    let player = { PosX = WIDTH / 2; PosY = Rows.One; Width = 40 }
+    let player : Player = { PosX = WIDTH / 2;
+                            PosY = Rows.One;
+                            Width = 40
+                          }
 
     // Función para crear un obstáculo dado su posición central
     // Función para crear un obstáculo
-    let createObstacle (x_left, x_right, posY, speed, underwater)  = 
+    let createObstacle (x_left, x_right, posY, speed, underwater) : Obstacle  = 
         let obstacle: Obstacle = 
             { 
                 x_left = x_left; 
@@ -112,7 +114,7 @@ module Initial_Conditions =
     // Initialize `initFondo`
     let initFondo = 
         { Obstacles = obstaclesMap
-        Time = 60 }
+          Time = 60 }
 
     let game: GameState = 
         { Player = player; Final_row = goal_spaces; Score = 0; Lifes = ThreeLives; Fondo = initFondo }
