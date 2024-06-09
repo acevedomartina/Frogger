@@ -54,19 +54,19 @@ module Functions =
     let checkCollision (player : Player) (obstacle : Obstacle) =
         return player.PosX + player.Width/2 > obstacle.x_left || player.PosX - player.Width/2 < obstacle.x_right
 
-    let checkUpLogTurtle (player : Player) (obstacle : Obstacle) = 
+    let checkNotUpLogTurtle (player : Player) (obstacle : Obstacle) = 
         if not ostacle.Underwater then
             if obstacle.x_left < player.PosX - player.Width / 2 && obstacle.x_right > player.PosX + player.Width / 2 then
-                true
-            else if obstacle.x_left > obstacle.x_right then
-                (obstacle.x_right > player.PosX + player.Width / 2)
-            else if obstacle.x_left < player.PosX - player.Width / 2 then
-                true
-            else
                 false
+            else if obstacle.x_left > obstacle.x_right then
+                (obstacle.x_right < player.PosX + player.Width / 2)
+            else if obstacle.x_left < player.PosX - player.Width / 2 then
+                false
+            else
+                true
         
         else
-            false
+            true
 
     let moveObstacle (obstacle : Obstacle) = 
         let x_left_new : int = (obstacle.x_left + WIDTH) % WIDTH 
@@ -125,7 +125,7 @@ module Functions =
                                             else
                                                 game
         | Eight | Nine | Ten | Eleven | Twelve -> let obstacles = Map.find PosY game.Fondo.Obstacles
-                                                let drown = List.exists (checkUpLogTurtle player) obstacles
+                                                let drown = List.exists (checkNotUpLogTurtle player) obstacles
                                                 if drown then
                                                     let newGame = updateLives game
                                                     let newPlayer = {player with PosX = WIDTH/2; PosY = Rows.One}
