@@ -91,7 +91,7 @@ module Initial_Conditions =
         Time = 60
     }
 
-    let gameState = 
+    let game = 
     {
         Player = player
         Final_row = goal_spaces

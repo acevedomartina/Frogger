@@ -11,34 +11,34 @@ module Functions =
     // Función que mueve de una fila hacia la fila de arriba
     let moveUp (posY : Rows) = 
         match posY with
-        | One _ -> Two Road
-        | Two _ -> Three Road
-        | Three _ -> Four Road
-        | Four _ -> Five Road
-        | Five _ -> Six Road
-        | Six _ -> Seven Grass
-        | Seven _ -> Six Road
-        | Eight _ -> Nine Water
-        | Nine _ -> Ten Water
-        | Ten _ -> Eleven Water
-        | Eleven _ -> Twelve Water
+        | One _ -> Two
+        | Two _ -> Three
+        | Three _ -> Four
+        | Four _ -> Five
+        | Five _ -> Six
+        | Six _ -> Seven
+        | Seven _ -> Six
+        | Eight _ -> Nine
+        | Nine _ -> Ten
+        | Ten _ -> Eleven
+        | Eleven _ -> Twelve
         | Twelve _ -> Thirteen
 
     // Función que mueve de una fila hacia la fila de abajo
     let moveDown (posY : Rows) = 
         match posY with
-        | One _ -> One Grass
-        | Two _ -> One Grass
-        | Three _ -> Two Road
-        | Four _ -> Three Road
-        | Five _ -> Four Road
-        | Six _ -> Five Road
-        | Seven _ -> Six Road
-        | Eight _ -> Seven Grass
-        | Nine _ -> Eight Water
-        | Ten _ -> Nine Water
-        | Eleven _ -> Ten Water
-        | Twelve _ -> Eleven Water
+        | One _ -> One
+        | Two _ -> One
+        | Three _ -> Two
+        | Four _ -> Three
+        | Five _ -> Four
+        | Six _ -> Five
+        | Seven _ -> Six
+        | Eight _ -> Seven
+        | Nine _ -> Eight
+        | Ten _ -> Nine
+        | Eleven _ -> Ten
+        | Twelve _ -> Eleven
 
     // Función que mueve al jugador en la dirección indicada
     let movePlayer (player : Player) (dir: Direction)  = 
@@ -55,20 +55,18 @@ module Functions =
         return player.PosX + player.Width/2 > obstacle.x_left || player.PosX - player.Width/2 < obstacle.x_right
 
     let checkUpLogTurtle (player : Player) (obstacle : Obstacle) = 
-        if obstacle.Underwater then
+        if not ostacle.Underwater then
             if obstacle.x_left < player.PosX - player.Width / 2 && obstacle.x_right > player.PosX + player.Width / 2 then
-                return true
+                true
             else if obstacle.x_left > obstacle.x_right then
-                return (obstacle.x_right > player.PosX + player.Width / 2)
+                (obstacle.x_right > player.PosX + player.Width / 2)
             else if obstacle.x_left < player.PosX - player.Width / 2 then
-                return true
+                true
             else
-                return false
+                false
         
         else
-            return false
-        
-        
+            false
 
     let moveObstacle (obstacle : Obstacle) = 
         let x_left_new : int = (obstacle.x_left + WIDTH) % WIDTH 
@@ -76,11 +74,40 @@ module Functions =
 
         {obstacle with x_left = x_left_new; x_right = x_right_new}
 
-    let state_tortuga(tiempo: int, obstacle: Obstacle) = 
+    let state_tortuga(tiempo: int ) (obstacle: Obstacle list) (idx : int) =
         if tiempo % 10 = 0 then
             {obstacle with Underwater = not Underwater}
         else
             obstacle
 
+    let updateFondo (fondo : Fondo) = 
+        let newObstacles = List.map moveObstacle fondo.Obstacles
+        let newTime = fondo.Time - 1
+        {fondo with Obstacles = newObstacles; Time = newTime}
 
-    let 
+    let updateGameState (game : gameState) (Option<Direction>) = 
+            match Option<Direction> with
+            | Some dir -> let newObstacles = List.map (moveObstacle game.Fondo.Obstacles)
+                          let newFondo = {game.Fondo with Obstacles = newObstacles}
+                          let newPlayer = movePlayer game.Player dir
+                          {game with Player = newPlayer; Fondo = newFondo}
+            | None -> let newObstacles = List.map (moveObstacle game.Fondo.Obstacles)
+                      let newFondo = {game.Fondo with Obstacles = newObstacles}
+                      {game with Fondo = newFondo}
+        
+    // Chequear si el jugador colisiona con algún obstáculo
+    
+    // Chequear si se acabó el tiempo
+
+    // Chequear si se ahogó
+
+    // Chequear si llegó a la meta
+
+    // Chequear si Ganó el nivel
+    
+    let checkPlayerStatus (player : Player) (obstacle : Map<Rows, Obstacle list>) = 
+        let row = player.posY
+        match row with
+        | One -> {player}
+        | Two -> list.map (checkCollision player) (obstacle.[Two]) 
+

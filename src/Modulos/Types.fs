@@ -1,11 +1,6 @@
 ﻿namespace Frogger.Modulos
 
-module Types = 
-
-    type Grass = Grass
-    type Water = Water
-    type Road = Road
-    
+module Types =     
     type GoalSpace =
     {
         PosX: int
@@ -14,18 +9,18 @@ module Types =
     }
 
     type Rows = 
-    | One of Grass
-    | Two of Road
-    | Three of Road
-    | Four of Road
-    | Five of Road
-    | Six of Road
-    | Seven of Grass
-    | Eight of Water
-    | Nine of Water
-    | Ten of Water
-    | Eleven of Water
-    | Twelve of Water
+    | One
+    | Two
+    | Three
+    | Four
+    | Five
+    | Six
+    | Seven
+    | Eight
+    | Nine
+    | Ten
+    | Eleven
+    | Twelve
     | Thirteen
 
     type Player =
@@ -58,14 +53,14 @@ module Types =
 
     type Fondo = 
     {
-        Obstacles: Obstacle list
+        Obstacles: Map<Rows, Obstacle list>
         Time: int
     }
 
-    type Game =
+    type GameState =
     {
         Player: Player
-        Final_row: Final_row
+        Final_row: GoalSpace list
         Score: int
         Lifes: LivesRemaining
         Fondo: Fondo
