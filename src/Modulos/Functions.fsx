@@ -22,7 +22,7 @@ module Functions =
         | Nine _ -> Ten
         | Ten _ -> Eleven
         | Eleven _ -> Twelve
-        | Twelve _ -> Thirteen
+        | Twelve _ -> Thirteen 
 
     // Función que mueve de una fila hacia la fila de abajo
     let moveDown (posY : Rows) = 
@@ -68,12 +68,11 @@ module Functions =
         else
             true
 
-    let moveObstacle (obstacle : Obstacle) = 
-        let x_left_new : int = (obstacle.x_left + WIDTH) % WIDTH 
-        let x_right_new : int = (obstacle.x_right + WIDTH) % WIDTH
+    let moveObstacle (obstacle: Obstacle) =
+        let x_left_new : int = (obstacle.x_left + obstacle.Speed) % WIDTH 
+        let x_right_new : int = (obstacle.x_right + obstacle.Speed) % WIDTH
 
         {obstacle with x_left = x_left_new; x_right = x_right_new}
-
     let state_tortuga(tiempo: int ) (obstacle: Obstacle list) (idx : int) =
         if tiempo % 10 = 0 then
             {obstacle with Underwater = not Underwater}
@@ -96,6 +95,33 @@ module Functions =
                       {game with Fondo = newFondo}
             
     // Chequear si se acabó el tiempo
+    let CheckTime (game: GameState) = 
+        if game.Fondo.Time = 0 then
+            {game with Lifes = GameOver}
+        else
+            game
+
+    //Funcion que Checkea si una casilla de meta es alcanzada
+    let CheckWinAux (player : Player) (goal_space : GoalSpace) = 
+
+        let player_xright = player.PosX + player.Width / 2
+        let player_xleft = player.PosX - player.Width / 2
+
+        if player_xleft > goal_space.PosX && player_xright < goal_space.PosX + goal_space.Width then
+            { goal_space with Ocupation = true }          
+        else
+            { goal_space with Ocupation = false }
+
+    // Función que chequea si el jugador llegó a alguna meta
+    let CheckGoal (game: GameStatus) (goal_spaces : GoalSpace list) = 
+        let player = game.Player
+        let updatedGoalSpaces = List.map (CheckWinAux player) goal_spaces
+        {game with Final_row = updatedGoalSpaces Player.PosX = WIDTH/2; PosY = Rows.One; Width = 50}
+
+    // Funcion que checkea si se gano el nivel
+    let CheckWin (game : GameState) = 
+        List.forall (fun goal -> goal.Ocupation) game.Final_row
+
 
     // Chequear si se ahogó y Chequear si el jugador colisiona con algún obstáculo
 
