@@ -489,3 +489,31 @@ let ``UpdateLives should correctly update the number of lives`` () =
     let gameAfterCollision = {gameInit with Lifes = LivesRemaining.TwoLives}
     let gameAfterUpdate = updateLives gameAfterCollision
     Assert.Equal(OneLife, gameAfterUpdate.Lifes) // Verifica si la función updateLives actualiza correctamente el número de vidas
+
+
+[<Fact>]
+// Test de `updateFondo` en el para el cambio del estado de las tortugas y update de los obstáculos
+// Me fijo que solo cambien las tortugas en el índice 1 de las filas 8 y 11
+let ``updateFondo should move obstacles and change turtle states`` () = 
+    let fondo = 
+        {
+            Obstacles = 
+                Map.ofList 
+                    [ 
+                        Rows.Two, [{ x_left = 100; x_right = 200; PosY = Two; Speed = 2; Underwater = false }];
+                        Rows.Eight, [{ x_left = 100; x_right = 200; PosY = Eight; Speed = 2; Underwater = false }; {x_left = 250; x_right = 350; PosY = Eight; Speed = 2; Underwater = false}];
+                        Rows.Eleven, [{ x_left = 100; x_right = 200; PosY = Eleven; Speed = 2; Underwater = false}; {x_left = 250; x_right = 350; PosY = Eight; Speed = 2; Underwater = false}]
+                    ]
+            Time = 10
+        }
+    let updatedFondo = updateFondo fondo
+    let notUpdatedRowTwo = updatedFondo.Obstacles.[Rows.Two].[0].Underwater
+    let notUpdatedRowEight = updatedFondo.Obstacles.[Rows.Eight].[0].Underwater
+    let UpdatedRowEight = updatedFondo.Obstacles.[Rows.Eight].[1].Underwater
+    let notUpdatedRowEleven = updatedFondo.Obstacles.[Rows.Eleven].[0].Underwater
+    let UpdatedRowEleven = updatedFondo.Obstacles.[Rows.Eleven].[1].Underwater
+    Assert.False(notUpdatedRowTwo)
+    Assert.False(notUpdatedRowEight)
+    Assert.True(UpdatedRowEight)
+    Assert.False(notUpdatedRowEleven)
+    Assert.True(UpdatedRowEleven)

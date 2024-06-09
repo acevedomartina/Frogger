@@ -90,28 +90,28 @@ module Functions =
 
     ////////////////// Funciones de actualización del fondo /////////////////////////
 
-//     // Función para cambiar el estado de la tortuga i-ésima cada 10 segundos
-//     let changeTurtleState (tiempo : int) (turtle : Obstacle) : Obstacle = 
-//         if tiempo % 10 = 0 then
-//             {turtle with Underwater = not turtle.Underwater}
-//         else
-//             turtle
+    // Función para cambiar el estado de la tortuga i-ésima cada 10 segundos
+    let changeTurtleState (tiempo : int) (turtle : Obstacle) : Obstacle = 
+        if tiempo % 10 = 0 then
+            {turtle with Underwater = not turtle.Underwater}
+        else
+            turtle
         
-//     // Función para actualizar el fondo del juego, los obstáculos y el estado de las tortugas
-//     let updateFondo (fondo : Fondo) = 
-//         // Cambiamos todos los obstáculos moviendolos
-//         let movedObstacles = Map.map (fun _ lst -> lst |> List.map moveObstacle) fondo.Obstacles
+    // Función para actualizar el fondo del juego, los obstáculos y el estado de las tortugas
+    let updateFondo (fondo : Fondo) = 
+        // Cambiamos todos los obstáculos moviendolos
+        let movedObstacles = Map.map (fun _ lst -> lst |> List.map moveObstacle) fondo.Obstacles
         
-//         // Cambiamos el estado de las tortugas en las filas 8 y 11 cada 10 segundos
-//         let idx = 1 // Como hay dos y tres tortugas en las filas 8 y 11 respectivamente cambiamos el estado de la segunda tortuga en cada fila
+        // Cambiamos el estado de las tortugas en las filas 8 y 11 cada 10 segundos
+        let idx = 1 // Como hay dos y tres tortugas en las filas 8 y 11 respectivamente cambiamos el estado de la segunda tortuga en cada fila
 
-//         // Tomamos el mapa de Rows, Obstacle list
-//         // A cada lista de obstáculos extraemos los valoes key y lst
-//         // A la lista lst le aplicamos un map en donde si la key es Rows.Eight o Rows.Eleven entonces cambiamos el estado de la tortuga idx-ésima
-//         // En caso contrario devolvemos el obstáculo
-//         let updatedObstacles = movedObstacles |> Map.map (fun k lst -> lst |> List.mapi (fun j obs -> if (k = Rows.Eight || k = Rows.Eleven) && j = idx then changeTurtleState fondo.Time obs else obs))
-//         // Return the updated fondo
-//         {fondo with Obstacles = updatedObstacles; Time = fondo.Time - 1}
+        // Tomamos el mapa de Rows, Obstacle list
+        // A cada lista de obstáculos extraemos los valoes key y lst
+        // A la lista lst le aplicamos un map en donde si la key es Rows.Eight o Rows.Eleven entonces cambiamos el estado de la tortuga idx-ésima
+        // En caso contrario devolvemos el obstáculo
+        let updatedObstacles = movedObstacles |> Map.map (fun k lst -> lst |> List.mapi (fun j obs -> if (k = Rows.Eight || k = Rows.Eleven) && j = idx then changeTurtleState fondo.Time obs else obs))
+        // Return the updated fondo
+        {fondo with Obstacles = updatedObstacles; Time = fondo.Time - 1}
 
 
 //     ////////////////// Funciones que auxiliares para la actualización del juego /////////////////////////
