@@ -13,8 +13,18 @@ module Initial_Conditions =
     let player = { PosX = WIDTH / 2; PosY = Rows.One; Width = 40 }
 
     // Función para crear un obstáculo dado su posición central
-    let createObstacle (x_left, x_right, posY, width, speed, underwater) = 
-        { x_left = x_left; x_right = x_right; PosY = posY; Width = width; Speed = speed; Underwater = underwater }
+    // Función para crear un obstáculo
+    let createObstacle (x_left, x_right, posY, width, speed, underwater)  = 
+        let obstacle: Obstacle = 
+            { 
+                x_left = x_left; 
+                x_right = x_right; 
+                PosY = posY; 
+
+                Speed = speed; 
+                Underwater = underwater 
+            }
+        obstacle
 
     // Definamos los obstáculos fila por fila 
     let row2_Auto1 = createObstacle (200, 240, Rows.Two, 40, 1, false)
@@ -88,21 +98,5 @@ module Initial_Conditions =
     let initFondo = 
         { Obstacles = Map.ofList [ (Rows.Two, row2); (Rows.Three, row3); (Rows.Four, row4); (Rows.Five, row5); (Rows.Six, row6); (Rows.Eight, row8); (Rows.Nine, row9); (Rows.Ten, row10); (Rows.Eleven, row11); (Rows.Twelve, row12) ]; Time = 60 }
 
-    let game = 
+    let game: GameState = 
         { Player = player; Final_row = goal_spaces; Score = 0; Lifes = ThreeLives; Fondo = initFondo }
-
-
-    let initFondo = 
-    {
-        Obstacles = Map.ofList [Rows.Two, row2; Rows.Three, row3; Rows.Four, row4; Rows.Five, row5; Rows.Six, row6; Rows.Eight, row8; Rows.Nine, row9; Rows.Ten, row10; Rows.Eleven, row11; Rows.Twelve, row12]
-        Time = 60
-    }
-
-    let game = 
-    {
-        Player = player
-        Final_row = goal_spaces
-        Score = 0
-        Lifes = ThreeLives
-        Fondo = initFondo
-    }

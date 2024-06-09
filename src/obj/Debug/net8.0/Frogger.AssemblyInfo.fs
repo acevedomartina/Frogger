@@ -10,7 +10,7 @@ open System.Reflection
 [<assembly: System.Reflection.AssemblyCompanyAttribute("Frogger")>]
 [<assembly: System.Reflection.AssemblyConfigurationAttribute("Debug")>]
 [<assembly: System.Reflection.AssemblyFileVersionAttribute("1.0.0.0")>]
-[<assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+644ddf6d45c0600ae2e2cb353913046b0069a117")>]
+[<assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+14f06bfc7dbdcefe99c5b49e7f30b2bdf0fd66b1")>]
 [<assembly: System.Reflection.AssemblyProductAttribute("Frogger")>]
 [<assembly: System.Reflection.AssemblyTitleAttribute("Frogger")>]
 [<assembly: System.Reflection.AssemblyVersionAttribute("1.0.0.0")>]
