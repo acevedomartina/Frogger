@@ -1,0 +1,90 @@
+{
+  "format": 1,
+  "restore": {
+    "C:\\Users\\Martina\\Desktop\\Programación_avanzada\\Frogger\\src\\Modulos\\Test\\Test.fsproj": {}
+  },
+  "projects": {
+    "C:\\Users\\Martina\\Desktop\\Programación_avanzada\\Frogger\\src\\Modulos\\Test\\Test.fsproj": {
+      "version": "1.0.0",
+      "restore": {
+        "projectUniqueName": "C:\\Users\\Martina\\Desktop\\Programación_avanzada\\Frogger\\src\\Modulos\\Test\\Test.fsproj",
+        "projectName": "Test",
+        "projectPath": "C:\\Users\\Martina\\Desktop\\Programación_avanzada\\Frogger\\src\\Modulos\\Test\\Test.fsproj",
+        "packagesPath": "C:\\Users\\Martina\\.nuget\\packages\\",
+        "outputPath": "C:\\Users\\Martina\\Desktop\\Programación_avanzada\\Frogger\\src\\Modulos\\Test\\obj\\",
+        "projectStyle": "PackageReference",
+        "configFilePaths": [
+          "C:\\Users\\Martina\\AppData\\Roaming\\NuGet\\NuGet.Config"
+        ],
+        "originalTargetFrameworks": [
+          "net8.0"
+        ],
+        "sources": {
+          "C:\\Program Files\\dotnet\\sdk\\8.0.204\\FSharp\\library-packs": {},
+          "https://api.nuget.org/v3/index.json": {}
+        },
+        "frameworks": {
+          "net8.0": {
+            "targetAlias": "net8.0",
+            "projectReferences": {}
+          }
+        },
+        "restoreAuditProperties": {
+          "enableAudit": "true",
+          "auditLevel": "low",
+          "auditMode": "direct"
+        }
+      },
+      "frameworks": {
+        "net8.0": {
+          "targetAlias": "net8.0",
+          "dependencies": {
+            "FSharp.Core": {
+              "include": "Runtime, Compile, Build, Native, Analyzers, BuildTransitive",
+              "target": "Package",
+              "version": "[8.0.200, )",
+              "generatePathProperty": true
+            },
+            "Microsoft.NET.Test.Sdk": {
+              "target": "Package",
+              "version": "[17.8.0, )",
+              "generatePathProperty": true
+            },
+            "coverlet.collector": {
+              "target": "Package",
+              "version": "[6.0.0, )",
+              "generatePathProperty": true
+            },
+            "xunit": {
+              "target": "Package",
+              "version": "[2.5.3, )",
+              "generatePathProperty": true
+            },
+            "xunit.runner.visualstudio": {
+              "target": "Package",
+              "version": "[2.5.3, )",
+              "generatePathProperty": true
+            }
+          },
+          "imports": [
+            "net461",
+            "net462",
+            "net47",
+            "net471",
+            "net472",
+            "net48",
+            "net481"
+          ],
+          "assetTargetFallback": true,
+          "warn": true,
+          "frameworkReferences": {
+            "Microsoft.NETCore.App": {
+              "privateAssets": "all"
+            }
+          },
+          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\8.0.204/PortableRuntimeIdentifierGraph.json"
+        }
+      }
+    }
+  }
+}

@@ -101,9 +101,8 @@ module Functions =
         else
             game
 
-    //Funcion que Checkea si una casilla de meta es alcanzada
-    let CheckWinAux (player : Player) (goal_space : GoalSpace) = 
 
+    let CheckWinAux (player : Player) (goal_space : GoalSpace) = 
         let player_xright = player.PosX + player.Width / 2
         let player_xleft = player.PosX - player.Width / 2
 
@@ -113,22 +112,26 @@ module Functions =
             { goal_space with Ocupation = false }
 
     // Función que chequea si el jugador llegó a alguna meta
-    let CheckGoal (game: GameStatus) (goal_spaces : GoalSpace list) = 
+    let CheckGoal (game : GameState) =
         let player = game.Player
+        let goal_spaces = game.Final_row
         let updatedGoalSpaces = List.map (CheckWinAux player) goal_spaces
-        {game with Final_row = updatedGoalSpaces Player.PosX = WIDTH/2; PosY = Rows.One; Width = 50}
+        let anyGoalSpaceChanged = List.exists (fun gs -> gs.Ocupation) updatedGoalSpaces
 
-    // Funcion que checkea si se gano el nivel
+        if anyGoalSpaceChanged then
+            { game with Final_row = updatedGoalSpaces }
+        else
+            updateLives game
+        
+
+    // Chequear si ganó el nivel, ie, si todos los elementos de finalrow son True
     let CheckWin (game : GameState) = 
-        List.forall (fun goal -> goal.Ocupation) game.Final_row
+        if List.forall (fun goal -> goal.Ocupation) game.Final_row then
+            let newFinalRow = List.map (fun goal -> { goal with Ocupation = false }) game.Final_row
+            { game with Score = game.Score + 1000; Lifes = ThreeLives; Player = { PosX = WIDTH/2; PosY = One; Width = 40 }; Final_row = newFinalRow }
+        else
+            game
 
-
-    // Chequear si se ahogó y Chequear si el jugador colisiona con algún obstáculo
-
-    // Chequear si llegó a la meta
-
-    // Chequear si Ganó el nivel
-    
     let updateLives (game : GameState) = 
         let lifes = game.Lifes
         match lifes with
