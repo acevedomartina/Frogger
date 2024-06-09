@@ -363,12 +363,32 @@ let ``border checkNotUpLogTurtle should detect player completely left from log r
     // Assert
     Assert.True(result)
 
-// //TEST PARA UPDATELIVES
-[<Fact>]
-let ``UpdateLives should correctly update the number of lives`` () =
-    
+// Inicializamos las posiciones del jugador y de los obstáculos
+    // Inicializamos las posiciones del jugador y de los obstáculos
+    let WIDTH : int= 800
+    let HEIGHT : int= 600
 
+    let external_width : int = 100
 
+    let player : Player = { PosX = WIDTH / 2;
+                            PosY = Rows.One;
+                            Width = 40
+                          }
 
+    // Función para crear un obstáculo dado su posición central
+    // Función para crear un obstáculo
+    let createObstacle (x_left, x_right, posY, speed, underwater) : Obstacle  = 
+        let obstacle: Obstacle = 
+            { 
+                x_left = x_left; 
+                x_right = x_right; 
+                PosY = posY;
+                Speed = speed; 
+                Underwater = underwater 
+            }
+        obstacle
+
+    // Definamos los obstáculos fila por fila 
+    let row2_Auto1 = createObstacle (200, 240, Rows.Two, 1, false)
 
 
