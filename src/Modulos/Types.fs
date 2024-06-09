@@ -1,13 +1,8 @@
 ﻿namespace Frogger.Modulos
 
-module Types =     
-    type GoalSpace =
-    {
-        PosX: int
-        Width: int
-        Ocupation: bool
-    }
-
+module Types =
+    
+    // Tipo que define las filas del juego
     type Rows = 
     | One
     | Two
@@ -23,46 +18,59 @@ module Types =
     | Twelve
     | Thirteen
 
+    // Tipo que define al jugador
     type Player =
-    {
-        PosX: int
-        PosY: Rows
-        Width: int
-    }
+        {
+            PosX: int // Posición del centro del jugador
+            PosY: Rows // Posición en la fila del jugador
+            Width: int // Ancho en píxeles del jugador
+        }
 
+    // Tipo que define las direcciones posibles de movimiento
     type Direction =
     | Up
     | Down
     | Left
     | Right
 
+    // Tipo que define un obstáculo
     type Obstacle =
-    {
-        x_left: int
-        x_right: int
-        PosY: Rows
-        Width: int
-        Speed: int
-        Underwater: bool
-    }
+        {
+            x_left: int // Extremo izquierdo del obstáculo
+            x_right: int // Extremo derecho del obstáculo
+            PosY: Rows // Posición de la fila del obstáculo
+            Speed: int // Velocidad del obstáculo
+            Underwater: bool // Indica si el obstáculo está debajo del agua
+        }
 
+    // Tipo que define la cantidad de vidas restantes
     type LivesRemaining =
     | GameOver
     | OneLife
     | TwoLives
     | ThreeLives
 
+    // Tipo que define el fondo del juego
     type Fondo = 
-    {
-        Obstacles: Map<Rows, Obstacle list>
-        Time: int
-    }
+        {
+            Obstacles: Map<Rows, Obstacle list> // Cada fila tiene una lista de obstáculos distinta
+            Time: int // Temporizador actual del juego
+        }
 
+    // Tipo que define cada espacio de meta
+    type GoalSpace =
+        {
+            PosX: int // Posición del centro del espacio de meta
+            Width: int // Ancho en píxeles del espacio de meta
+            Ocupation: bool // Indica si el espacio de meta está ocupado
+        }
+
+    // Tipo que define el estado actual del juego
     type GameState =
-    {
-        Player: Player
-        Final_row: GoalSpace list
-        Score: int
-        Lifes: LivesRemaining
-        Fondo: Fondo
-    }
+        {
+            Player: Player // Jugador
+            Final_row: GoalSpace list // Espacios de meta
+            Score: int // Puntaje actual
+            Lifes: LivesRemaining // Vidas restantes
+            Fondo: Fondo // Fondo del juego
+        }
