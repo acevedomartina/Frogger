@@ -2,92 +2,99 @@ namespace Frogger.Modulos
 
 module Initial_Conditions =
 
-    open Frogger.Types
-    
-    //Inicializamos las posiciones del jugador y de los obstaculos
-    //Definimos el extremo lateral izquierdo como el límite
+    open Frogger.Modulos.Types
 
+    // Inicializamos las posiciones del jugador y de los obstáculos
     let WIDTH = 800
     let HEIGHT = 600
 
     let external_width = 100
 
-    let player = { PosX = WIDTH/2 ; PosY = Rows.One Grass; Width = 40}
+    let player = { PosX = WIDTH / 2; PosY = Rows.One; Width = 40 }
 
-    // Definamos los obstaculos fila por fila 
-    
-    let row2_Auto1 = { PosX = 200; PosY = Rows.Two Road; Width = 40; Speed = 1}
-    let row2_Auto2 = { PosX = 300; PosY = Rows.Two Road; Width = 40; Speed = 1}
-    let row2_Auto3 = { PosX = 400; PosY = Rows.Two Road; Width = 40; Speed = 1}
+    // Función para crear un obstáculo dado su posición central
+    let createObstacle (x_left, x_right, posY, width, speed, underwater) = 
+        { x_left = x_left; x_right = x_right; PosY = posY; Width = width; Speed = speed; Underwater = underwater }
+
+    // Definamos los obstáculos fila por fila 
+    let row2_Auto1 = createObstacle (200, 240, Rows.Two, 40, 1, false)
+    let row2_Auto2 = createObstacle (300, 340, Rows.Two, 40, 1, false)
+    let row2_Auto3 = createObstacle (400, 440, Rows.Two, 40, 1, false)
 
     let row2 = [row2_Auto1; row2_Auto2; row2_Auto3] 
 
-    let row3_Auto1 = { PosX = 150; PosY = Rows.Three Road; Width = 50; Speed = 2}
-    let row3_Auto2 = { PosX = 300; PosY = Rows.Three Road; Width = 50; Speed = 2}
-    let row3_Auto3 = { PosX = 450; PosY = Rows.Three Road; Width = 50; Speed = 2}
+    let row3_Auto1 = createObstacle (150, 200, Rows.Three, 50, 2, false)
+    let row3_Auto2 = createObstacle (300, 350, Rows.Three, 50, 2, false)
+    let row3_Auto3 = createObstacle (450, 500, Rows.Three, 50, 2, false)
 
     let row3 = [row3_Auto1; row3_Auto2; row3_Auto3]
 
-    let row4_Auto1 = { PosX = 100; PosY = Rows.Three Road; Width = 40; Speed = 2}
-    let row4_Auto2 = { PosX = 400; PosY = Rows.Three Road; Width = 40; Speed = 2}
-    let row4_Auto3 = { PosX = 700; PosY = Rows.Three Road; Width = 40; Speed = 2}    
+    let row4_Auto1 = createObstacle (100, 140, Rows.Four, 40, 2, false)
+    let row4_Auto2 = createObstacle (400, 440, Rows.Four, 40, 2, false)
+    let row4_Auto3 = createObstacle (700, 740, Rows.Four, 40, 2, false)    
 
     let row4 = [row4_Auto1; row4_Auto2; row4_Auto3]
 
-    let row5_Auto1 = { PosX = 400; PosY = Rows.Three Road; Width = 40; Speed = 3}
-    let row5_Auto2 = { PosX = 500; PosY = Rows.Three Road; Width = 40; Speed = 3}
+    let row5_Auto1 = createObstacle (400, 440, Rows.Five, 40, 3, false)
+    let row5_Auto2 = createObstacle (500, 540, Rows.Five, 40, 3, false)
 
     let row5 = [row5_Auto1; row5_Auto2]
 
-    let row6_Auto1 = { PosX = 100; PosY = Rows.Three Road; Width = 60; Speed = 1}
-    let row6_Auto2 = { PosX = 400; PosY = Rows.Three Road; Width = 60; Speed = 1}
+    let row6_Auto1 = createObstacle (100, 160, Rows.Six, 60, 1, false)
+    let row6_Auto2 = createObstacle (400, 460, Rows.Six, 60, 1, false)
 
     let row6 = [row6_Auto1; row6_Auto2]
 
-    //cada tortuga mide 60 -> acá tenemos conjuntos de dos tortugas
-    let row8_Turtle1 = { PosX = 100; PosY = Rows.Eight Water; Width = 90; Speed = 2; Timer = 0}
-    let row8_Turtle2 = { PosX = 200; PosY = Rows.Eight Water; Width = 90; Speed = 2; Timer = 0}
+    // Cada tortuga mide 60 -> acá tenemos conjuntos de dos tortugas
+    let row8_Turtle1 = createObstacle (100, 190, Rows.Eight, 90, 2, true)
+    let row8_Turtle2 = createObstacle (200, 290, Rows.Eight, 90, 2, true)
 
     let row8 = [row8_Turtle1; row8_Turtle2]
-    
-    let row9_log1 = { PosX = 100; PosY = Rows.Nine Water; Width = 70; Speed = 1}
-    let row9_log2 = { PosX = 300; PosY = Rows.Nine Water; Width = 70; Speed = 1}
-    let row9_log3 = { PosX = 500; PosY = Rows.Nine Water; Width = 70; Speed = 1}
+
+    let row9_log1 = createObstacle (100, 170, Rows.Nine, 70, 1, true)
+    let row9_log2 = createObstacle (300, 370, Rows.Nine, 70, 1, true)
+    let row9_log3 = createObstacle (500, 570, Rows.Nine, 70, 1, true)
 
     let row9 = [row9_log1; row9_log2; row9_log3]
 
-    let row10_log1 = { PosX = 100; PosY = Rows.Ten Water; Width = 130; Speed = 2}
+    let row10_log1 = createObstacle (100, 230, Rows.Ten, 130, 2, true)
 
     let row10 = [row10_log1]
 
-
-    let row11_Turtle1 = { PosX = 100; PosY = Rows.Eleven Water; Width = 60; Speed = 1; Timer = 0}
-    let row11_Turtle2 = { PosX = 200; PosY = Rows.Eleven Water; Width = 60; Speed = 1; Timer = 0}
-    let row11_Turtle3 = { PosX = 300; PosY = Rows.Eleven; Water; Width = 60; Speed = 1; Timer = 0}
+    let row11_Turtle1 = createObstacle (100, 160, Rows.Eleven, 60, 1, true)
+    let row11_Turtle2 = createObstacle (200, 260, Rows.Eleven, 60, 1, true)
+    let row11_Turtle3 = createObstacle (300, 360, Rows.Eleven, 60, 1, true)
 
     let row11 = [row11_Turtle1; row11_Turtle2; row11_Turtle3]
 
-    let row12_log1 = { PosX = 250; PosY = Rows.Twelve Water; Width = 70; Speed = 1}
-    let row12_log2 = { PosX = 350; PosY = Rows.Twelve Water; Width = 70; Speed = 1}
-    let row12_log3 = { PosX = 450; PosY = Rows.Twelve Water; Width = 70; Speed = 1}
+    let row12_log1 = createObstacle (250, 320, Rows.Twelve, 70, 1, true)
+    let row12_log2 = createObstacle (350, 420, Rows.Twelve, 70, 1, true)
+    let row12_log3 = createObstacle (450, 520, Rows.Twelve, 70, 1, true)
 
     let row12 = [row12_log1; row12_log2; row12_log3]
 
-    //En la fila final, definimos 5 espacios de meta
-    //Primero tenemos una porción de pasto vacía (len: 30)
-    //Después tenemos 5 espacios de meta (len: 60) espaciados en 60
-    let space1 = { PosX = 30; Width = 60; Ocupation = False}
-    let space2 = { PosX = 150 ; Width = 60; Ocupation = False}
-    let space3 = { PosX = 270; Width = 60; Ocupation = False}
-    let space4 = { PosX = 390; Width = 60; Ocupation = False}
-    let space5 = { PosX = 510; Width = 60; Ocupation = False}
+    // En la fila final, definimos 5 espacios de meta
+    // Primero tenemos una porción de pasto vacía (len: 30)
+    // Después tenemos 5 espacios de meta (len: 60) espaciados en 60
+    let space1 = { PosX = 30; Width = 60; Ocupation = false }
+    let space2 = { PosX = 150; Width = 60; Ocupation = false }
+    let space3 = { PosX = 270; Width = 60; Ocupation = false }
+    let space4 = { PosX = 390; Width = 60; Ocupation = false }
+    let space5 = { PosX = 510; Width = 60; Ocupation = false }
 
     let goal_spaces = [space1; space2; space3; space4; space5]
-    //luego habrá otro espacio de pasto vacío (len: 30)
+    // Luego habrá otro espacio de pasto vacío (len: 30)
+
+    let initFondo = 
+        { Obstacles = Map.ofList [ (Rows.Two, row2); (Rows.Three, row3); (Rows.Four, row4); (Rows.Five, row5); (Rows.Six, row6); (Rows.Eight, row8); (Rows.Nine, row9); (Rows.Ten, row10); (Rows.Eleven, row11); (Rows.Twelve, row12) ]; Time = 60 }
+
+    let game = 
+        { Player = player; Final_row = goal_spaces; Score = 0; Lifes = ThreeLives; Fondo = initFondo }
+
 
     let initFondo = 
     {
-        Obstacles = row2 @ row3 @ row4 @ row5 @ row6 @ row8 @ row9 @ row10 @ row11 @ row12
+        Obstacles = 
         Time = 60
     }
 
