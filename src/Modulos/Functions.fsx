@@ -221,3 +221,5 @@ let CheckGoal (game : GameState) =
         match gameR with
         | Ok game -> Ok (CheckWin game)
         | Error e -> Error e
+
+
