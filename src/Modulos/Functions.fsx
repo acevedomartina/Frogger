@@ -75,19 +75,86 @@ module Functions =
         let collisionL = player.PosX + player.Width/2 >= obstacle.x_left && player.PosX + player.Width/2 <= obstacle.x_right
         let collisionR = player.PosX - player.Width/2 >= obstacle.x_left && player.PosX - player.Width/2 <= obstacle.x_right
         collisionL || collisionR
+        // Si choca por la izquierda 
+        let collisionL = player.PosX + player.Width/2 >= obstacle.x_left && player.PosX + player.Width/2 <= obstacle.x_right
+        let collisionR = player.PosX - player.Width/2 >= obstacle.x_left && player.PosX - player.Width/2 <= obstacle.x_right
+        collisionL || collisionR
 
     // Chequeo si el jugador no está arriba de un tronco o una tortuga
     let checkNotUpLogTurtle (player : Player) (obstacle : Obstacle) : bool = 
         // Si la tortuga no está sumergida veo que pasa
         if not obstacle.Underwater then
             if obstacle.x_left > obstacle.x_right then
+            if obstacle.x_left > obstacle.x_right then
                 // Si el extremo derecho del jugador está a la derecha del obstáculo me ahogo entonces devuelve true
                 // En caso contrario no me ahogo y devuelve false
                 (obstacle.x_right < player.PosX + player.Width / 2) && (obstacle.x_left > player.PosX - player.Width / 2)
             else 
                 (obstacle.x_left > player.PosX - player.Width / 2) || (obstacle.x_right < player.PosX + player.Width / 2)    
+                (obstacle.x_right < player.PosX + player.Width / 2) && (obstacle.x_left > player.PosX - player.Width / 2)
+            else 
+                (obstacle.x_left > player.PosX - player.Width / 2) || (obstacle.x_right < player.PosX + player.Width / 2)    
         else
             true
+
+    ////////////////// Funciones de actualización del fondo /////////////////////////
+
+    // Función para cambiar el estado de la tortuga i-ésima cada 10 segundos
+    let changeTurtleState (tiempo : int) (turtle : Obstacle) : Obstacle = 
+        if tiempo % 10 = 0 then
+            {turtle with Underwater = not turtle.Underwater}
+        else
+            turtle
+        
+    // Función para actualizar el fondo del juego, los obstáculos y el estado de las tortugas
+    let updateFondo (fondo : Fondo) = 
+        // Cambiamos todos los obstáculos moviendolos
+        let movedObstacles = Map.map (fun _ lst -> lst |> List.map moveObstacle) fondo.Obstacles
+        
+        // Cambiamos el estado de las tortugas en las filas 8 y 11 cada 10 segundos
+        let idx = 1 // Como hay dos y tres tortugas en las filas 8 y 11 respectivamente cambiamos el estado de la segunda tortuga en cada fila
+
+        // Tomamos el mapa de Rows, Obstacle list
+        // A cada lista de obstáculos extraemos los valoes key y lst
+        // A la lista lst le aplicamos un map en donde si la key es Rows.Eight o Rows.Eleven entonces cambiamos el estado de la tortuga idx-ésima
+        // En caso contrario devolvemos el obstáculo
+        let updatedObstacles = movedObstacles |> Map.map (fun k lst -> lst |> List.mapi (fun j obs -> if (k = Rows.Eight || k = Rows.Eleven) && j = idx then changeTurtleState fondo.Time obs else obs))
+        // Return the updated fondo
+        {fondo with Obstacles = updatedObstacles; Time = fondo.Time - 1}
+
+
+    ////////////////// Funciones que auxiliares para la actualización del juego /////////////////////////
+
+    // Chequear si se acabó el tiempo
+    let CheckTime (game: GameState) : GameState = 
+        if game.Fondo.Time = 0 then
+            let newPlayer = {game.Player with PosX = WIDTH/2; PosY = Rows.One}
+            let newGame = updateLives game
+            {newGame with Player = newPlayer}
+        else
+            game
+    
+    // Función que chequea si el jugador llegó a alguna meta
+    let CheckWinAux (player : Player) (goal_space : GoalSpace) : GoalSpace = 
+        let player_xright = player.PosX + player.Width / 2
+        let player_xleft = player.PosX - player.Width / 2
+
+    if player_xleft > goal_space.PosX && player_xright < goal_space.PosX + goal_space.Width then
+        { goal_space with Ocupation = true }          
+    else
+        { goal_space with Ocupation = false }
+
+// Función que chequea si el jugador llegó a alguna meta
+let CheckGoal (game : GameState) =
+    let player = game.Player
+    let goal_spaces = game.Final_row
+    let updatedGoalSpaces = List.map (CheckWinAux player) goal_spaces
+    let anyGoalSpaceChanged = List.exists (fun gs -> gs.Ocupation) updatedGoalSpaces
+
+        if anyGoalSpaceChanged then
+            { game with Final_row = updatedGoalSpaces; Score = game.Score + 50}
+        else
+            updateLives game
     
     // Función que actualiza la cantidad de vidas restantes
     let updateLives (game : GameState) : GameState = 
