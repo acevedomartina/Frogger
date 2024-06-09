@@ -62,3 +62,7 @@ C:\Users\Martina\Desktop\Programación_avanzada\Frogger\src\bin\Debug\net8.0\zh-
 C:\Users\Martina\Desktop\Programación_avanzada\Frogger\src\obj\Debug\net8.0\Frogger.fsproj.Up2Date
 C:\Users\Martina\Desktop\Programación_avanzada\Frogger\src\obj\Debug\net8.0\Frogger.genruntimeconfig.cache
 C:\Users\Martina\Desktop\Programación_avanzada\Frogger\src\obj\Debug\net8.0\ref\Frogger.dll
+C:\Users\Propietario\Desktop\ib\5-Maestría\Programación Avanzada\Frogger\src\bin\Debug\net8.0\xunit.abstractions.dll
+C:\Users\Propietario\Desktop\ib\5-Maestría\Programación Avanzada\Frogger\src\bin\Debug\net8.0\xunit.assert.dll
+C:\Users\Propietario\Desktop\ib\5-Maestría\Programación Avanzada\Frogger\src\bin\Debug\net8.0\xunit.core.dll
+C:\Users\Propietario\Desktop\ib\5-Maestría\Programación Avanzada\Frogger\src\bin\Debug\net8.0\xunit.execution.dotnet.dll

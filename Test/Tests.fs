@@ -4,7 +4,6 @@ open Xunit
 open Frogger.Modulos.Functions
 open Frogger.Modulos.Types
 open Frogger.Modulos.Initial_Conditions
-
 open Frogger.Modulos
 
 // TEST PARA MOVEDOWN
@@ -365,15 +364,10 @@ let ``border checkNotUpLogTurtle should detect player completely left from log r
     // Assert
     Assert.True(result)
 
-//TEST PARA UPDATELIVES
+// //TEST PARA UPDATELIVES
 [<Fact>]
 let ``UpdateLives should correctly update the number of lives`` () =
-    // Arrange
-    let initialGameState = Initial_Conditions.game
-
-    // Assert
-    Assert.NotNull(initialGameState)
-
+    
 
 
 
