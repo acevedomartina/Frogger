@@ -363,6 +363,12 @@ let ``border checkNotUpLogTurtle should detect player completely left from log r
     // Assert
     Assert.True(result)
 
+// //TEST PARA UPDATELIVES
+[<Fact>]
+let ``UpdateLives should correctly update the number of lives`` () =
+    
+
+
 
 
 
