@@ -121,87 +121,87 @@ let CheckTime (game: GameState) =
 //////////////////////////////////////////////////////////////////////////////7
 
     // Chequear si se acabó el tiempo
-    let CheckTime (game: GameState) = 
-        if game.Fondo.Time = 0 then
-            let newPlayer = {game.Player with PosX = WIDTH/2; PosY = Rows.One}
-            let newGame = updateLives game
-            {newGame with Player = newPlayer}
-        else
-            game
+let CheckTime (game: GameState) = 
+    if game.Fondo.Time = 0 then
+        let newPlayer = {game.Player with PosX = WIDTH/2; PosY = Rows.One}
+        let newGame = updateLives game
+        {newGame with Player = newPlayer}
+    else
+        game
 
 
-    let CheckWinAux (player : Player) (goal_space : GoalSpace) = 
-        let player_xright = player.PosX + player.Width / 2
-        let player_xleft = player.PosX - player.Width / 2
+let CheckWinAux (player : Player) (goal_space : GoalSpace) = 
+    let player_xright = player.PosX + player.Width / 2
+    let player_xleft = player.PosX - player.Width / 2
 
-        if player_xleft > goal_space.PosX && player_xright < goal_space.PosX + goal_space.Width then
-            { goal_space with Ocupation = true }          
-        else
-            { goal_space with Ocupation = false }
+    if player_xleft > goal_space.PosX && player_xright < goal_space.PosX + goal_space.Width then
+        { goal_space with Ocupation = true }          
+    else
+        { goal_space with Ocupation = false }
 
-    // Función que chequea si el jugador llegó a alguna meta
-    let CheckGoal (game : GameState) =
-        let player = game.Player
-        let goal_spaces = game.Final_row
-        let updatedGoalSpaces = List.map (CheckWinAux player) goal_spaces
-        let anyGoalSpaceChanged = List.exists (fun gs -> gs.Ocupation) updatedGoalSpaces
+// Función que chequea si el jugador llegó a alguna meta
+let CheckGoal (game : GameState) =
+    let player = game.Player
+    let goal_spaces = game.Final_row
+    let updatedGoalSpaces = List.map (CheckWinAux player) goal_spaces
+    let anyGoalSpaceChanged = List.exists (fun gs -> gs.Ocupation) updatedGoalSpaces
 
-        if anyGoalSpaceChanged then
-            { game with Final_row = updatedGoalSpaces }
-        else
-            updateLives game
-        
+    if anyGoalSpaceChanged then
+        { game with Final_row = updatedGoalSpaces; Score = game.Score + 50 }
+    else
+        updateLives game
+    
 
-    // Chequear si ganó el nivel, ie, si todos los elementos de finalrow son True
-    let CheckWin (game : GameState) = 
-        if List.forall (fun goal -> goal.Ocupation) game.Final_row then
-            let newFinalRow = List.map (fun goal -> { goal with Ocupation = false }) game.Final_row
-            { game with Score = game.Score + 1000; Lifes = ThreeLives; Player = { PosX = WIDTH/2; PosY = One; Width = 40 }; Final_row = newFinalRow }
-        else
-            game
+// Chequear si ganó el nivel, ie, si todos los elementos de finalrow son True
+let CheckWin (game : GameState) = 
+    if List.forall (fun goal -> goal.Ocupation) game.Final_row then
+        let newFinalRow = List.map (fun goal -> { goal with Ocupation = false }) game.Final_row
+        { game with Score = game.Score + 1000; Lifes = ThreeLives; Player = { PosX = WIDTH/2; PosY = One; Width = 40}; Final_row = newFinalRow }
+    else
+        game
 
-    let updateLives (game : GameState) = 
-        let lifes = game.Lifes
-        match lifes with
-        | GameOver -> game
-        | OneLife -> {game with Lifes = GameOver}
-        | TwoLives -> {game with Lifes = OneLife}
-        | ThreeLives -> {game with Lifes = TwoLives}
+let updateLives (game : GameState) = 
+    let lifes = game.Lifes
+    match lifes with
+    | GameOver -> game
+    | OneLife -> {game with Lifes = GameOver}
+    | TwoLives -> {game with Lifes = OneLife}
+    | ThreeLives -> {game with Lifes = TwoLives}
 
-    let checkLoseGame (game : GameState) = 
-        let lifes = game.Lifes
-        match lifes with
-        | GameOver -> Error "Game Over"
-        | _ -> Ok game
+let checkLoseGame (game : GameState) = 
+    let lifes = game.Lifes
+    match lifes with
+    | GameOver -> Error "Game Over"
+    | _ -> Ok game
 
-    let checkPlayerLose (game : GameState) =
-        let player = game.Player
-        let PosY = player.PosY
-        match PosY with
-        | One | Seven -> game
-        | Two | Three | Four | Five | Six ->    let obstacles = Map.find PosY game.Fondo.Obstacles
-                                                let collision = List.exists (checkCollision player) obstacles
-                                                if collision then
+let checkPlayerLose (game : GameState) =
+    let player = game.Player
+    let PosY = player.PosY
+    match PosY with
+    | One | Seven -> game
+    | Two | Three | Four | Five | Six ->    let obstacles = Map.find PosY game.Fondo.Obstacles
+                                            let collision = List.exists (checkCollision player) obstacles
+                                            if collision then
+                                                let newGame = checkLoseGame (updateLives game)
+                                                if newGame.IsOk then
+                                                    let newPlayer = {player with PosX = WIDTH/2; PosY = Rows.One}
+                                                    let newScore = game.Score + 10 
+                                                    Ok {newGame with Player = newPlayer, Score = newScore}
+                                                else
+                                                    newGame
+                                            else
+                                                Ok game
+    | Eight | Nine | Ten | Eleven | Twelve ->   let obstacles = Map.find PosY game.Fondo.Obstacles
+                                                let drown = List.exists (checkNotUpLogTurtle player) obstacles
+                                                if drown then
                                                     let newGame = checkLoseGame (updateLives game)
                                                     if newGame.IsOk then
                                                         let newPlayer = {player with PosX = WIDTH/2; PosY = Rows.One}
-                                                        let newScore = game.Score + 10 
+                                                        let newScore = game.Score + 10
                                                         Ok {newGame with Player = newPlayer, Score = newScore}
                                                     else
                                                         newGame
                                                 else
                                                     Ok game
-        | Eight | Nine | Ten | Eleven | Twelve ->   let obstacles = Map.find PosY game.Fondo.Obstacles
-                                                    let drown = List.exists (checkNotUpLogTurtle player) obstacles
-                                                    if drown then
-                                                        let newGame = checkLoseGame (updateLives game)
-                                                        if newGame.IsOk then
-                                                            let newPlayer = {player with PosX = WIDTH/2; PosY = Rows.One}
-                                                            let newScore = game.Score + 10
-                                                            Ok {newGame with Player = newPlayer, Score = newScore}
-                                                        else
-                                                            newGame
-                                                    else
-                                                        Ok game
 
-        | Thirteen -> //Chequear si ganó o perdío una vida
+    | Thirteen -> //Chequear si ganó o perdío una vida

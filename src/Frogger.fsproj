@@ -3,12 +3,14 @@
     <OutputType>Exe</OutputType>
     <TargetFramework>net8.0</TargetFramework>
   </PropertyGroup>
+  
   <ItemGroup>
     <Compile Include="Modulos\Test.fs" />
     <Compile Include="Program.fs" />
     <Compile Include="Modulos\Types.fs" />
-    <None Include="Modulos\Functions.fsx" />
+    <Compile Include="Modulos\Functions.fsx" />
   </ItemGroup>
+
   <ItemGroup>
     <PackageReference Include="xunit" Version="2.8.1" />
   </ItemGroup>
