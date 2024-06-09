@@ -2,14 +2,19 @@
 
 open Frogger.Modulos.Types
 
-
 module Functions =
 
+    // Ancho y alto de la pantalla
     let WIDTH = 800
     let HEIGHT = 600
+    
+    // Ancho de la parte jugable de la pantalla
     let WIDTH_PLAYABLE_LEFT = 100 
     let WIDTH_PLAYABLE_RIGHT = 700
 
+
+    ////////////////// Funciones de movimiento del jugador y obstáculos /////////////////////////
+    
     // Función que mueve de una fila hacia la fila de arriba
     let moveUp (posY : Rows) = 
         match posY with
@@ -45,21 +50,30 @@ module Functions =
         | _ -> raise (System.Exception("Error no deberia pasar"))
 
     // Función que mueve al jugador en la dirección indicada
-    let movePlayer (player : Player) (dir: Direction)  = 
+    let movePlayer (player : Player) (dir: Direction) : Player = 
         match dir with
         | Up -> let newPosY = moveUp player.PosY
                 {player with PosY = newPosY}
         | Down -> let newPosY = moveDown player.PosY
                 {player with PosY = newPosY}
-        | Left -> if player.PosX - 50 < WIDTH_PLAYABLE_LEFT then player else {player with PosX = player.PosX - 50}    
-        | Right -> if player.PosX + 50 > WIDTH_PLAYABLE_RIGHT then player else {player with PosX = player.PosX + 50}
+         // Si se sale de la pantalla jugable no se mueve
+        | Left -> if player.PosX - 50 < WIDTH_PLAYABLE_LEFT then player else {player with PosX = player.PosX - 50}
+        | Right -> if player.PosX + 50 > WIDTH_PLAYABLE_RIGHT then player else {player with PosX = player.PosX + 50} 
+
+    // Función que mueve un obstáculo y establece las condiciones periódicas de contorno
+    let moveObstacle (obstacle: Obstacle) : Obstacle =
+        let x_left_new : int = (obstacle.x_left + obstacle.Speed) % WIDTH 
+        let x_right_new : int = (obstacle.x_right + obstacle.Speed) % WIDTH
+        {obstacle with x_left = x_left_new; x_right = x_right_new}
+
+    ////////////////// Funciones de cheque colisión o ahogamiento del jugador en la posición actual /////////////////////////
 
     // Chequeamos que haya colisión entre el jugador y el obstáculo
-    let checkCollision (player : Player) (obstacle : Obstacle) =
+    let checkCollision (player : Player) (obstacle : Obstacle) : bool=
         (player.PosX + player.Width/2 > obstacle.x_left || player.PosX - player.Width/2 < obstacle.x_right)
 
     // Chequeo si el jugador no está arriba de un tronco o una tortuga
-    let checkNotUpLogTurtle (player : Player) (obstacle : Obstacle) = 
+    let checkNotUpLogTurtle (player : Player) (obstacle : Obstacle) : bool = 
         // Si la tortuga no está sumergida veo que pasa
         if not obstacle.Underwater then
             // Condición para que esté totalmente arriba del obsáculo
@@ -80,14 +94,11 @@ module Functions =
         else
             true
 
-    // Función que mueve un obstáculo y establece las condiciones periódicas de contorno
-    let moveObstacle (obstacle: Obstacle) =
-        let x_left_new : int = (obstacle.x_left + obstacle.Speed) % WIDTH 
-        let x_right_new : int = (obstacle.x_right + obstacle.Speed) % WIDTH
-        {obstacle with x_left = x_left_new; x_right = x_right_new}
+
+    ////////////////// Funciones de actualización del fondo /////////////////////////
 
     // Función para cambiar el estado de la tortuga i-ésima cada 10 segundos
-    let state_tortuga (idx : int) (tiempo: int) (obstacles: Obstacle list) =
+    let state_tortuga (idx : int) (tiempo: int) (obstacles: Obstacle list) : Obstacle list=
         if tiempo % 10 = 0 then
             obstacles |> List.mapi (fun i x -> if i = idx then {x with Underwater = not x.Underwater} else x)
         else
@@ -105,30 +116,22 @@ module Functions =
                                                                                                           else
                                                                                                             obs))
         // Return the updated fondo
-        {fondo with Obstacles = updatedObstcles}
+        {fondo with Obstacles = updatedObstcles; Time = fondo.Time - 1}
 
-    let updateGameState (game : GameState) (dir : Option<Direction>) = 
-            match dir with
-            | Some d -> let newFondo = updateFondo game.Fondo
-                        let newPlayer = movePlayer game.Player d
-                        {game with Player = newPlayer; Fondo = newFondo}
-                    
-            | None -> let newFondo = updateFondo game.Fondo
-                    {game with Fondo = newFondo}
-            
-//////////////////////////////////////////////////////////////////////////////7
+
+    ////////////////// Funciones que auxiliares para la actualización del juego /////////////////////////
 
     // Chequear si se acabó el tiempo
-    let CheckTime (game: GameState) = 
+    let CheckTime (game: GameState) : GameState = 
         if game.Fondo.Time = 0 then
             let newPlayer = {game.Player with PosX = WIDTH/2; PosY = Rows.One}
             let newGame = updateLives game
             {newGame with Player = newPlayer}
         else
             game
-
-
-    let CheckWinAux (player : Player) (goal_space : GoalSpace) = 
+    
+    // Función que chequea si el jugador llegó a alguna meta
+    let CheckWinAux (player : Player) (goal_space : GoalSpace) : GoalSpace = 
         let player_xright = player.PosX + player.Width / 2
         let player_xleft = player.PosX - player.Width / 2
 
@@ -148,16 +151,8 @@ module Functions =
             { game with Final_row = updatedGoalSpaces; Score = game.Score + 50}
         else
             updateLives game
-        
-
-    // Chequear si ganó el nivel, ie, si todos los elementos de finalrow son True
-    let CheckWin (game : GameState) = 
-        if List.forall (fun goal -> goal.Ocupation) game.Final_row then
-            let newFinalRow = List.map (fun goal -> { goal with Ocupation = false }) game.Final_row
-            { game with Score = game.Score + 1000; Lifes = ThreeLives; Player = { PosX = WIDTH/2; PosY = One; Width = 40 }; Final_row = newFinalRow }
-        else
-            game
-
+    
+    // Función que actualiza la cantidad de vidas restantes
     let updateLives (game : GameState) = 
         let lifes = game.Lifes
         match lifes with
@@ -166,12 +161,30 @@ module Functions =
         | TwoLives -> {game with Lifes = OneLife}
         | ThreeLives -> {game with Lifes = TwoLives}
 
-    let checkLoseGame (game : GameState) = 
-        let lifes = game.Lifes
-        match lifes with
-        | GameOver -> Error "Game Over"
-        | _ -> Ok game
+    // Chequear si ganó el nivel, ie, si todos los elementos de finalrow son True
+    let CheckWin (game : GameState) : bool = 
+        if List.forall (fun goal -> goal.Ocupation) game.Final_row then
+            let newFinalRow = List.map (fun goal -> { goal with Ocupation = false }) game.Final_row
+            { game with Score = game.Score + 1000; Lifes = ThreeLives; Player = { PosX = WIDTH/2; PosY = One; Width = 40 }; Final_row = newFinalRow }
+        else
+            game
 
+////////////////// Funciones que actualizan el estado del juego/////////////////////////
+
+    // Función que actualiza el estado del juego según una dirección de movimiento o no movimiento
+    let updateGameState (game : Result<GameState, string>) (dir : Option<Direction>) : GameState = 
+            match game with
+            | Ok game ->
+                match dir with
+                | Some d -> let newFondo = updateFondo game.Fondo
+                            let newPlayer = movePlayer game.Player d
+                            CheckTime {game with Player = newPlayer; Fondo = newFondo}
+                        
+                | None -> let newFondo = updateFondo game.Fondo
+                        CheckTime {game with Fondo = newFondo}
+            | Error e -> raise (System.Exception(e))
+
+    // Función que chequea si el jugador perdió una vida o si se acabó el juego
     let checkPlayerLose (game : GameState) : Result<GameState, string>=
         let player = game.Player
         let PosY = player.PosY
@@ -201,9 +214,15 @@ module Functions =
                                                     else
                                                         Ok game
         | Thirteen -> let newGame = CheckGoal game
-                    match newGame.Lifes with
-                        | GameOver -> Error "Game Over"
-                        | _ -> let newGame = CheckWin newGame
-                            match newGame.Lifes with
-                            | GameOver -> Error "Game Over"
-                            | _ -> Ok newGame
+                      match newGame.Lifes with
+                      | GameOver -> Error "Game Over"
+                      | _ -> let newGame = CheckWin newGame
+                             match newGame.Lifes with
+                             | GameOver -> Error "Game Over"
+                             | _ -> Ok newGame
+    
+    // Función final que actualiza el estado del juego para volver a usar updateGameState
+    let final (gameR : Result<GameState, string>) : Result<GameState, string> = 
+        match gameR with
+        | Ok game -> Ok (CheckWin game)
+        | Error e -> Error e
