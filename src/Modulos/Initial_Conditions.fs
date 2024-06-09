@@ -90,19 +90,3 @@ module Initial_Conditions =
 
     let game = 
         { Player = player; Final_row = goal_spaces; Score = 0; Lifes = ThreeLives; Fondo = initFondo }
-
-
-    let initFondo = 
-    {
-        Obstacles = Map.ofList [Rows.Two, row2; Rows.Three, row3; Rows.Four, row4; Rows.Five, row5; Rows.Six, row6; Rows.Eight, row8; Rows.Nine, row9; Rows.Ten, row10; Rows.Eleven, row11; Rows.Twelve, row12]
-        Time = 60
-    }
-
-    let game = 
-    {
-        Player = player
-        Final_row = goal_spaces
-        Score = 0
-        Lifes = ThreeLives
-        Fondo = initFondo
-    }

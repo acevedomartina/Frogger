@@ -70,40 +70,33 @@ module Functions =
 
     // Chequeamos que haya colisión entre el jugador y el obstáculo
     let checkCollision (player : Player) (obstacle : Obstacle) : bool=
-        (player.PosX + player.Width/2 > obstacle.x_left || player.PosX - player.Width/2 < obstacle.x_right)
+        // Si choca por la izquierda 
+        let collisionL = player.PosX + player.Width/2 >= obstacle.x_left && player.PosX + player.Width/2 <= obstacle.x_right
+        let collisionR = player.PosX - player.Width/2 >= obstacle.x_left && player.PosX - player.Width/2 <= obstacle.x_right
+        collisionL || collisionR
 
     // Chequeo si el jugador no está arriba de un tronco o una tortuga
     let checkNotUpLogTurtle (player : Player) (obstacle : Obstacle) : bool = 
         // Si la tortuga no está sumergida veo que pasa
         if not obstacle.Underwater then
-            // Condición para que esté totalmente arriba del obsáculo
-            if obstacle.x_left < player.PosX - player.Width / 2 && obstacle.x_right > player.PosX + player.Width / 2 then
-                false
-            // Si se teletransporta al otro lado el obstaculo pasa esto
-            else if obstacle.x_left > obstacle.x_right then
+            if obstacle.x_left > obstacle.x_right then
                 // Si el extremo derecho del jugador está a la derecha del obstáculo me ahogo entonces devuelve true
                 // En caso contrario no me ahogo y devuelve false
-                (obstacle.x_right < player.PosX + player.Width / 2)
-            // Si el extremo izquierdo del jugador esta a la derecha del extremo izquierdo del obstáculo no me ahogo devuelve false
-            // En caso contrario devuelve true
-            else if obstacle.x_left < player.PosX - player.Width / 2 then
-                false
-            else
-                true
-        
+                (obstacle.x_right < player.PosX + player.Width / 2) && (obstacle.x_left > player.PosX - player.Width / 2)
+            else 
+                (obstacle.x_left > player.PosX - player.Width / 2) || (obstacle.x_right < player.PosX + player.Width / 2)    
         else
             true
-
 
     ////////////////// Funciones de actualización del fondo /////////////////////////
 
     // Función para cambiar el estado de la tortuga i-ésima cada 10 segundos
-    let state_tortuga (idx : int) (tiempo: int) (obstacles: Obstacle list) : Obstacle list=
+    let changeTurtleState (tiempo : int) (turtle : Obstacle) : Obstacle = 
         if tiempo % 10 = 0 then
-            obstacles |> List.mapi (fun i x -> if i = idx then {x with Underwater = not x.Underwater} else x)
+            {turtle with Underwater = not turtle.Underwater}
         else
-            obstacles
-
+            turtle
+        
     // Función para actualizar el fondo del juego, los obstáculos y el estado de las tortugas
     let updateFondo (fondo : Fondo) = 
         // Cambiamos todos los obstáculos moviendolos
@@ -111,12 +104,14 @@ module Functions =
         
         // Cambiamos el estado de las tortugas en las filas 8 y 11 cada 10 segundos
         let idx = 1 // Como hay dos y tres tortugas en las filas 8 y 11 respectivamente cambiamos el estado de la segunda tortuga en cada fila
-        let updatedObstcles = movedObstacles |> Map.map (fun key lst -> lst |> List.mapi (fun idx obs ->  if key = Rows.Eight || key = Rows.Eleven then
-                                                                                                            state_tortuga idx fondo.Time lst |> List.item idx
-                                                                                                          else
-                                                                                                            obs))
+
+        // Tomamos el mapa de Rows, Obstacle list
+        // A cada lista de obstáculos extraemos los valoes key y lst
+        // A la lista lst le aplicamos un map en donde si la key es Rows.Eight o Rows.Eleven entonces cambiamos el estado de la tortuga idx-ésima
+        // En caso contrario devolvemos el obstáculo
+        let updatedObstacles = movedObstacles |> Map.map (fun k lst -> lst |> List.mapi (fun j obs -> if (k = Rows.Eight || k = Rows.Eleven) && j = idx then changeTurtleState fondo.Time obs else obs))
         // Return the updated fondo
-        {fondo with Obstacles = updatedObstcles; Time = fondo.Time - 1}
+        {fondo with Obstacles = updatedObstacles; Time = fondo.Time - 1}
 
 
     ////////////////// Funciones que auxiliares para la actualización del juego /////////////////////////
