@@ -530,7 +530,7 @@ let ``CheckTime should update game state when time is zero`` () =
     
     // Assert
     Assert.NotEqual(gameWithTimeZero, updatedGameStateTime)
-    // Aquí puedes agregar más aserciones específicas según la lógica de CheckTime
+    
 
 [<Fact>]
 let ``CheckTime should not update game state when time is non-zero`` () =
@@ -544,4 +544,163 @@ let ``CheckTime should not update game state when time is non-zero`` () =
     Assert.Equal(gameWithTimeNonZero, updatedGameStateTimeNonZero)
     // Aquí puedes agregar más aserciones específicas según la lógica de CheckTime
 
-    
+// TEST CHECKGOAL
+
+[<Fact>]
+let ``CheckGoal should update score and goal spaces when player reaches goal`` () =
+    // Arrange
+    let playerInGoal = { PosX = 40; PosY = Rows.Thirteen; Width = 10 }
+    let game_ =
+        {
+            Player = playerInGoal
+            Final_row = [
+                { PosX = 30; Width = 60; Ocupation = false }
+                { PosX = 150; Width = 60; Ocupation = false }
+                { PosX = 270; Width = 60; Ocupation = false }
+                { PosX = 390; Width = 60; Ocupation = false }
+                { PosX = 510; Width = 60; Ocupation = false }
+            ]
+            Score = 0
+            Lifes = ThreeLives
+            Fondo = { Obstacles = Map.empty; Time = 60 }
+        }
+
+    // Act
+    let resultCheckGoal = CheckGoal game_
+
+    // Assert
+    Assert.Equal(50, resultCheckGoal.Score)
+    Assert.True(resultCheckGoal.Final_row |> List.exists (fun gs -> gs.Ocupation))
+
+[<Fact>]
+let ``CheckGoal should not update score or goal spaces when player does not reach goal`` () =
+    // Arrange
+    let playerNotInGoal = { PosX = 10; PosY = Rows.Two; Width = 10 }
+    let game_ =
+        {
+            Player = playerNotInGoal
+            Final_row = [
+                { PosX = 30; Width = 60; Ocupation = false }
+                { PosX = 150; Width = 60; Ocupation = false }
+                { PosX = 270; Width = 60; Ocupation = false }
+                { PosX = 390; Width = 60; Ocupation = false }
+                { PosX = 510; Width = 60; Ocupation = false }
+            ]
+            Score = 0
+            Lifes = ThreeLives
+            Fondo = { Obstacles = Map.empty; Time = 60 }
+        }
+
+    // Act
+    let resultCheckGoal = CheckGoal game_
+
+    // Assert
+    Assert.Equal(0, resultCheckGoal.Score)
+    Assert.True(resultCheckGoal.Final_row |> List.forall (fun gs -> not gs.Ocupation))
+    Assert.Equal(TwoLives, resultCheckGoal.Lifes)  
+
+//TEST CHECKWIN
+[<Fact>]
+let ``CheckWin should update score, reset lives, and clear goal spaces when all goals are occupied`` () =
+    // Arrange
+    let playerInGoal = { PosX = 30; PosY = Rows.Thirteen; Width = 10 }
+    let game_ =
+        {
+            Player = playerInGoal
+            Final_row = [
+                { PosX = 30; Width = 60; Ocupation = true }
+                { PosX = 150; Width = 60; Ocupation = true }
+                { PosX = 270; Width = 60; Ocupation = true }
+                { PosX = 390; Width = 60; Ocupation = true }
+                { PosX = 510; Width = 60; Ocupation = true }
+            ]
+            Score = 0
+            Lifes = ThreeLives
+            Fondo = { Obstacles = Map.empty; Time = 60 }
+        }
+
+    // Act
+    let resultCheckWin = CheckWin game_
+
+    // Assert
+    Assert.Equal(1000, resultCheckWin.Score)  // La puntuación debe incrementarse en 1000
+    Assert.Equal(ThreeLives, resultCheckWin.Lifes)  // Las vidas deben restablecerse a ThreeLives
+    Assert.Equal(WIDTH / 2, resultCheckWin.Player.PosX)  // El jugador debe ser reposicionado al centro
+    Assert.Equal(Rows.One, resultCheckWin.Player.PosY)  // El jugador debe ser reposicionado en la primera fila
+    Assert.True(resultCheckWin.Final_row |> List.forall (fun gs -> not gs.Ocupation)) // Todos los espacios de meta deben estar desocupados
+
+[<Fact>]
+let ``CheckWin should not change game state if not all goals are occupied`` () =
+    // Arrange
+    let playerInGoal = { PosX = 30; PosY = Rows.Thirteen; Width = 10 }
+    let game_ : GameState =
+        {
+            Player = playerInGoal
+            Final_row = [
+                { PosX = 30; Width = 60; Ocupation = true }
+                { PosX = 150; Width = 60; Ocupation = true }
+                { PosX = 270; Width = 60; Ocupation = false }  // Un espacio no ocupado
+                { PosX = 390; Width = 60; Ocupation = true }
+                { PosX = 510; Width = 60; Ocupation = true }
+            ]
+            Score = 0
+            Lifes = ThreeLives
+            Fondo = { Obstacles = Map.empty; Time = 60 }
+        }
+
+    // Act
+    let resultCheckWin = CheckWin game_
+
+    // Assert
+    Assert.Equal(0, resultCheckWin.Score)  // La puntuación no debe cambiar
+    Assert.Equal(ThreeLives, resultCheckWin.Lifes)  // Las vidas no deben cambiar
+    Assert.Equal(game_.Player.PosX, resultCheckWin.Player.PosX)  // La posición del jugador no debe cambiar
+    Assert.Equal(game_.Player.PosY, resultCheckWin.Player.PosY)  // La posición del jugador no debe cambiar
+    Assert.Equal<GoalSpace list>(game_.Final_row, resultCheckWin.Final_row)  // Los espacios de meta no deben cambiar
+
+
+// TEST CHECKPLAYERLOSE
+[<Fact>]
+let ``checkPlayerLose should return Ok with game state when PosY is One`` () =
+    // Arrange
+    let player = { PosX = 100; PosY = Rows.One; Width = 40 }
+    let game_ : GameState =
+        {
+            Player = player
+            Final_row = []
+            Score = 0
+            Lifes = ThreeLives
+            Fondo = { Obstacles = Map.empty; Time = 60 }
+        }
+
+    // Act
+    let result = checkPlayerLose game_
+
+    // Assert
+    match result with
+    | Ok gameState -> Assert.Equal(game_, gameState)  // El estado del juego debe ser el mismo
+    | Error _ -> Assert.True(false, "Expected Ok but got Error")
+
+[<Fact>]
+let ``checkPlayerLose should return Ok with game state when PosY is Seven`` () =
+    // Arrange
+    let player = { PosX = 100; PosY = Rows.Seven; Width = 40 }
+    let game_ : GameState =
+        {
+            Player = player
+            Final_row = []
+            Score = 0
+            Lifes = ThreeLives
+            Fondo = { Obstacles = Map.empty; Time = 60 }
+        }
+
+    // Act
+    let result = checkPlayerLose game_
+
+    // Assert
+    match result with
+    | Ok gameState -> Assert.Equal(game_, gameState)  // El estado del juego debe ser el mismo
+    | Error _ -> Assert.True(false, "Expected Ok but got Error")
+
+
+

@@ -98,16 +98,16 @@ module Functions =
     ////////////////// Funciones de actualización del fondo /////////////////////////
 
 //     // Función para cambiar el estado de la tortuga i-ésima cada 10 segundos
-//     let changeTurtleState (tiempo : int) (turtle : Obstacle) : Obstacle = 
-//         if tiempo % 10 = 0 then
-//             {turtle with Underwater = not turtle.Underwater}
-//         else
-//             turtle
+    let changeTurtleState (tiempo : int) (turtle : Obstacle) : Obstacle = 
+        if tiempo % 10 = 0 then
+            {turtle with Underwater = not turtle.Underwater}
+        else
+            turtle
         
 //     // Función para actualizar el fondo del juego, los obstáculos y el estado de las tortugas
-//     let updateFondo (fondo : Fondo) = 
-//         // Cambiamos todos los obstáculos moviendolos
-//         let movedObstacles = Map.map (fun _ lst -> lst |> List.map moveObstacle) fondo.Obstacles
+    let updateFondo (fondo : Fondo) = 
+         // Cambiamos todos los obstáculos moviendolos
+        let movedObstacles = Map.map (fun _ lst -> lst |> List.map moveObstacle) fondo.Obstacles
         
         // Cambiamos el estado de las tortugas en las filas 8 y 11 cada 10 segundos
         let idx = 1 // Como hay dos y tres tortugas en las filas 8 y 11 respectivamente cambiamos el estado de la segunda tortuga en cada fila
