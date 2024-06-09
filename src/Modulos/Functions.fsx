@@ -147,14 +147,14 @@ module Functions =
 //         else
 //             updateLives game
     
-//     // Función que actualiza la cantidad de vidas restantes
-//     let updateLives (game : GameState) = 
-//         let lifes = game.Lifes
-//         match lifes with
-//         | GameOver -> game
-//         | OneLife -> {game with Lifes = GameOver}
-//         | TwoLives -> {game with Lifes = OneLife}
-//         | ThreeLives -> {game with Lifes = TwoLives}
+    // Función que actualiza la cantidad de vidas restantes
+    let updateLives (game : GameState) = 
+        let lifes = game.Lifes
+        match lifes with
+        | GameOver -> game
+        | OneLife -> {game with Lifes = GameOver}
+        | TwoLives -> {game with Lifes = OneLife}
+        | ThreeLives -> {game with Lifes = TwoLives}
 
 //     // Chequear si ganó el nivel, ie, si todos los elementos de finalrow son True
 //     let CheckWin (game : GameState) : bool = 

@@ -10,9 +10,8 @@ module Initial_Conditions =
     let external_width : int = 100
 
     let player : Player = { PosX = WIDTH / 2;
-                            PosY = Rows.One;
-                            Width = 40
-                          }
+                            PosY = Rows.One
+                            Width = 40}
 
     // Función para crear un obstáculo dado su posición central
     // Función para crear un obstáculo

@@ -53,7 +53,7 @@ module Types =
     // Tipo que define el fondo del juego
     type Fondo = 
         {
-            Obstacles: Map<Rows, Obstacle list> // Cada fila tiene una lista de obstáculos distinta
+            Obstacles: Map<Rows,List<Obstacle>> // Cada fila tiene una lista de obstáculos distinta
             Time: int // Temporizador actual del juego
         }
 
@@ -69,7 +69,7 @@ module Types =
     type GameState =
         {
             Player: Player // Jugador
-            Final_row: GoalSpace list // Espacios de meta
+            Final_row: List<GoalSpace> // Espacios de meta
             Score: int // Puntaje actual
             Lifes: LivesRemaining // Vidas restantes
             Fondo: Fondo // Fondo del juego
