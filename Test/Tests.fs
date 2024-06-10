@@ -616,7 +616,7 @@ let ``CheckWin should update score, reset lives, and clear goal spaces when all 
             ]
             Score = 0
             Lifes = ThreeLives
-            Fondo = { Obstacles = Map.empty; Time = 60 }
+            Fondo = { Obstacles = Map.empty; Time = 30 }
         }
 
     // Act
@@ -645,7 +645,7 @@ let ``CheckWin should not change game state if not all goals are occupied`` () =
             ]
             Score = 0
             Lifes = ThreeLives
-            Fondo = { Obstacles = Map.empty; Time = 60 }
+            Fondo = { Obstacles = Map.empty; Time = 30 }
         }
 
     // Act
@@ -702,5 +702,180 @@ let ``checkPlayerLose should return Ok with game state when PosY is Seven`` () =
     | Ok gameState -> Assert.Equal(game_, gameState)  // El estado del juego debe ser el mismo
     | Error _ -> Assert.True(false, "Expected Ok but got Error")
 
+[<Fact>]
+let ``checkPlayerLose should return Ok with updated game state when there's a collision and lives are updated`` () =
+    // Arrange
+    // Define player position
+    let playerPos = Rows.Two
+    // Define obstacles with collision
+    let obstacleWithCollision1 = { x_left = 50; x_right = 100; PosY = playerPos; Speed = 0; Underwater = false }
+    let obstacleWithCollision2 = { x_left = 200; x_right = 250; PosY = playerPos; Speed = 0; Underwater = false }
+    // Create the map of rows to lists of obstacles
+    let obstaclesMap = 
+        [(playerPos, [obstacleWithCollision1; obstacleWithCollision2])] 
+        |> Map.ofList
+    // Define game state with collision
+    let game_ : GameState =
+        {
+            Player = { PosX = 75; PosY = playerPos; Width = 40 }
+            Final_row = []
+            Score = 0
+            Lifes = ThreeLives
+            Fondo = { Obstacles = obstaclesMap; Time = 60 }
+        }
 
+    // Act
+    let result = checkPlayerLose game_
+
+    // Assert
+    match result with
+    | Ok updatedGameState ->
+        // Check if player's position is reset to Rows.One
+        Assert.Equal(Rows.One, updatedGameState.Player.PosY)
+        // Check if player's X position is reset to WIDTH/2
+        Assert.Equal(WIDTH / 2, updatedGameState.Player.PosX)
+        // Check if game score is increased by 10
+        Assert.Equal(-10, updatedGameState.Score - game_.Score)
+        // Check if lives are decremented or remain the same
+        match updatedGameState.Lifes with
+        | GameOver -> Assert.True(false, "Expected Ok with updated lives but got GameOver")
+        | _ -> Assert.Equal(TwoLives, updatedGameState.Lifes)
+    | Error _ -> Assert.True(false, "Expected Ok but got Error")
+
+
+[<Fact>]
+let ``checkPlayerLose should return GameOver when there's a collision and only one life remains`` () =
+    // Arrange
+    // Define player position
+    let playerPos = Rows.Two
+    // Define obstacles with collision
+    let obstacleWithCollision = { x_left = 50; x_right = 100; PosY = playerPos; Speed = 0; Underwater = false }
+    // Create the map of rows to lists of obstacles
+    let obstaclesMap = [(playerPos, [obstacleWithCollision])] |> Map.ofList
+    // Define game state with collision and only one life remaining
+    
+    let game_ : GameState =
+        {
+            Player = { PosX = 75; PosY = playerPos; Width = 40 }
+            Final_row = []
+            Score = 0
+            Lifes = OneLife // Only one life remaining
+            Fondo = { Obstacles = obstaclesMap; Time = 60 }
+        }
+
+    // Act
+    let result = checkPlayerLose game_
+
+    // Assert
+    match result with
+    | Ok _ -> Assert.True(false, "Expected GameOver but got Ok")
+    | Error errorMsg -> Assert.Equal("Game Over", errorMsg)
+
+[<Fact>]
+let ``checkPlayerLose should return Ok without updating game state when there's no collision`` () =
+    // Arrange
+    // Define player position
+    let playerPos = Rows.Two
+    // Define obstacles without collision
+    let obstaclesWithoutCollision = []
+    // Define game state without collision
+    let game_ : GameState =
+        {
+            Player = { PosX = 75; PosY = playerPos; Width = 40 }
+            Final_row = []
+            Score = 0
+            Lifes = ThreeLives
+            Fondo = { Obstacles = Map.ofList [(playerPos, obstaclesWithoutCollision)]; Time = 60 }
+        }
+
+  
+    let result = checkPlayerLose game_
+
+    match result with
+    | Ok updatedGameState ->
+        // Check if player's position remains the same
+        Assert.Equal(playerPos, updatedGameState.Player.PosY)
+        // Check if player's X position remains the same
+        Assert.Equal(75, updatedGameState.Player.PosX)
+        // Check if game score remains the same
+        Assert.Equal(0, updatedGameState.Score - game_.Score)
+        // Check if lives remain the same
+        Assert.Equal(ThreeLives, updatedGameState.Lifes)
+    | Error _ -> Assert.True(false, "Expected Ok but got Error")
+
+
+
+[<Fact>]
+let ``checkPlayerLose should return Ok with updated game state when goal is reached - WIN`` () =
+    // Arrange
+    // Define player position
+    let playerPos = Rows.Thirteen
+    // Define game state with goal reached
+    let game_ : GameState =
+        {
+            Player = { PosX = 10; PosY = playerPos; Width = 20 }
+            Final_row = 
+                [
+                    { PosX = 30; Width = 60; Ocupation = true }
+                    { PosX = 150; Width = 60; Ocupation = true }
+                    { PosX = 270; Width = 60; Ocupation = true }
+                    { PosX = 390; Width = 60; Ocupation = true }
+                    { PosX = 510; Width = 60; Ocupation = true }
+                ]
+            Score = 0
+            Lifes = ThreeLives
+            Fondo = { Obstacles = Map.empty; Time = 60 }
+        }
+
+    // Act
+    let result = checkPlayerLose game_
+
+    // Assert
+    match result with
+    | Ok updatedGameState ->
+        // Check if game state is updated after reaching the goal
+        Assert.Equal(1000, updatedGameState.Score)
+        Assert.Equal(ThreeLives, updatedGameState.Lifes)
+        // Check if player's position is reset to Rows.One
+        Assert.Equal(Rows.One, updatedGameState.Player.PosY)
+        // Check if player's X position is reset to WIDTH/2
+        Assert.Equal(WIDTH / 2, updatedGameState.Player.PosX)
+    | Error _ -> Assert.True(false, "Expected Ok but got Error")
+
+[<Fact>]
+let ``checkPlayerLose should return Ok with updated game state when goal is reached - NOT-WIN`` () =
+    // Arrange
+    // Define player position
+    let playerPos = Rows.Thirteen
+    // Define game state with goal reached
+    let game_ : GameState =
+        {
+            Player = { PosX = 40; PosY = playerPos; Width = 10 }
+            Final_row = 
+                [
+                    { PosX = 30; Width = 60; Ocupation = false }
+                    { PosX = 150; Width = 60; Ocupation = true }
+                    { PosX = 270; Width = 60; Ocupation = true }
+                    { PosX = 390; Width = 60; Ocupation = true }
+                    { PosX = 510; Width = 60; Ocupation = true }
+                ]
+            Score = 0
+            Lifes = ThreeLives
+            Fondo = { Obstacles = Map.empty; Time = 30 }
+        }
+
+    // Act
+    let result = checkPlayerLose game_
+    
+    // Assert
+    match result with
+    | Ok updatedGameState ->
+        // Check if game state is updated after reaching the goal
+        Assert.Equal(50, updatedGameState.Score)
+        Assert.Equal(ThreeLives, updatedGameState.Lifes)
+        // Check if player's position is reset to Rows.One
+        Assert.Equal(Rows.One, updatedGameState.Player.PosY)
+        // Check if player's X position is reset to WIDTH/2
+        Assert.Equal(WIDTH / 2, updatedGameState.Player.PosX)
+    | Error _ -> Assert.True(false, "Expected Ok but got Error")
 
