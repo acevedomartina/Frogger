@@ -12,9 +12,8 @@ module Functions =
     let WIDTH_PLAYABLE_LEFT = 100 
     let WIDTH_PLAYABLE_RIGHT = 700
 
-
     ////////////////// Funciones de movimiento del jugador y obstáculos /////////////////////////
-    
+
     // Función que mueve de una fila hacia la fila de arriba
     let moveUp (posY : Rows) = 
         match posY with
@@ -127,9 +126,9 @@ module Functions =
         let lifes = game.Lifes
         match lifes with
         | GameOver -> game
-        | OneLife -> {game with Lifes = GameOver}
-        | TwoLives -> {game with Lifes = OneLife}
-        | ThreeLives -> {game with Lifes = TwoLives}
+        | OneLife -> {game with Lifes = GameOver; Fondo = {game.Fondo with Time = 60}}
+        | TwoLives -> {game with Lifes = OneLife; Fondo = {game.Fondo with Time = 60}}
+        | ThreeLives -> {game with Lifes = TwoLives; Fondo = {game.Fondo with Time = 60}}
 
     // Chequear si se acabó el tiempo
     let CheckTime (game: GameState) : GameState = 
@@ -156,7 +155,7 @@ module Functions =
         let updatedGoalSpaces = List.map (CheckWinAux player) goal_spaces
         let anyGoalSpaceChanged = List.exists (fun gs -> gs.Ocupation) updatedGoalSpaces
         if anyGoalSpaceChanged then
-            { game with Final_row = updatedGoalSpaces; Score = game.Score + 50}
+            { game with Final_row = updatedGoalSpaces; Score = game.Score + 50; Fondo = {game.Fondo with Time = 60}}
         else
             updateLives game
     
@@ -177,7 +176,8 @@ module Functions =
                 match dir with
                 | Some d -> let newFondo = updateFondo game.Fondo
                             let newPlayer = movePlayer game.Player d
-                            CheckTime {game with Player = newPlayer; Fondo = newFondo}
+                            let newScore = game.Score + 10
+                            CheckTime {game with Player = newPlayer; Fondo = newFondo; Score = newScore}
                         
                 | None -> let newFondo = updateFondo game.Fondo
                           CheckTime {game with Fondo = newFondo}
@@ -188,7 +188,12 @@ module Functions =
         let player = game.Player
         let PosY = player.PosY
         match PosY with
-        | One | Seven -> Ok game
+        | One | Seven -> match game.Lifes with
+                        | GameOver -> Error "Game Over"
+                        | _ -> let newGame = updateLives game
+                               let newPlayer = {player with PosX = WIDTH/2; PosY = Rows.One}
+                               Ok {newGame with Player = newPlayer}
+                               
         | Two | Three | Four | Five | Six ->    let obstacles = Map.find PosY game.Fondo.Obstacles
                                                 let collision = List.exists (checkCollision player) obstacles
                                                 if collision then
@@ -196,23 +201,24 @@ module Functions =
                                                     match newGame.Lifes with
                                                     | GameOver -> Error "Game Over"
                                                     | _ -> let newPlayer = {player with PosX = WIDTH/2; PosY = Rows.One}
-                                                           let newScore = game.Score + 10
+                                                           let newScore = newGame.Score - 10
                                                            Ok {newGame with Player = newPlayer; Score = newScore}
                                                 else
                                                     Ok game
 
         | Eight | Nine | Ten | Eleven | Twelve ->   let obstacles = Map.find PosY game.Fondo.Obstacles
-                                                    let drown = List.exists (checkNotUpLogTurtle player) obstacles
+                                                    let lista = List.map (checkNotUpLogTurtle player) obstacles
+                                                    let drown = List.forall (fun x -> x) lista
                                                     if drown then
                                                         let newGame = updateLives game
                                                         match newGame.Lifes with
                                                             | GameOver -> Error "Game Over"
                                                             | _ ->  let newPlayer = {player with PosX = WIDTH/2; PosY = Rows.One}
-                                                                    let newScore = game.Score + 10
+                                                                    let newScore = newGame.Score - 10
                                                                     Ok {newGame with Player = newPlayer; Score = newScore}
                                                     else
-                                                        Ok game
-        | Thirteen ->   let newGame = CheckGoal game
+                                                        Ok game 
+        | Thirteen ->   let newGame = {CheckGoal game with Player = { PosX = WIDTH/2; PosY = One; Width = game.Player.Width }}
                         match newGame.Lifes with
                         | GameOver -> Error "Game Over"
                         | _ ->  let newGame = CheckWin newGame

@@ -122,8 +122,6 @@ let game: GameState =
     { Player = player; Final_row = goal_spaces; Score = 0; Lifes = ThreeLives; Fondo = initFondo }
 
 
-
-
 // TEST PARA MOVEDOWN
 [<Fact>]
 let ``moveDown Two should return One`` () =
@@ -486,7 +484,7 @@ let ``border checkNotUpLogTurtle should detect player completely left from log r
 [<Fact>]
 let ``UpdateLives should correctly update the number of lives`` () = 
     let gameInit = game
-    let gameAfterCollision = {gameInit with Lifes = LivesRemaining.TwoLives}
+    let gameAfterCollision = {gameInit with Lifes = LivesRemaining.TwoLives; Fondo = {gameInit.Fondo with Time = 60}}
     let gameAfterUpdate = updateLives gameAfterCollision
     Assert.Equal(OneLife, gameAfterUpdate.Lifes) // Verifica si la función updateLives actualiza correctamente el número de vidas
 
@@ -879,3 +877,155 @@ let ``checkPlayerLose should return Ok with updated game state when goal is reac
         Assert.Equal(WIDTH / 2, updatedGameState.Player.PosX)
     | Error _ -> Assert.True(false, "Expected Ok but got Error")
 
+
+
+[<Fact>]
+let ``updateGameState cambia a la derecha la posición del jugador y el fondo``() =
+    let startGame = Ok game
+    let game1 = updateGameState startGame (Some Right)
+    let fondo_cambiado = updateFondo game.Fondo
+    let expectedGame = {game with Player = { PosX = WIDTH/2 + 50; PosY = Rows.One; Width = 40}; Fondo = fondo_cambiado; Score = game.Score + 10}
+    Assert.Equal(expectedGame, game1)
+
+[<Fact>]
+let ``updateGameState no cambia la posición del jugador pero si el fondo``() = 
+    let startGame = Ok game
+    let game1 = updateGameState startGame None
+    let fondo_cambiado = updateFondo game.Fondo
+    let expectedGame = {game with Player = { PosX = WIDTH/2; PosY = Rows.One; Width = 40 }; Fondo = fondo_cambiado}
+    Assert.Equal(expectedGame, game1)
+
+[<Fact>]
+let ``updateGameState recibe un juego terminado``() =
+        let gameResult = Error "Game error"
+        let direction = Some Up
+        Assert.Throws<System.Exception>(fun () -> updateGameState gameResult direction |> ignore) |> ignore
+
+[<Fact>]
+let ``checkPlayerLose en agua salvado``() = 
+    let player = { PosX = 150; PosY = Rows.Eight; Width = 10 }
+    let turtle1 = createObstacle (100, 190, Rows.Eight, 2, false)
+    let turtle2 = createObstacle (200, 290, Rows.Eight, 2, false)
+    let turtle3 = createObstacle (300, 390, Rows.Eight, 2, false)
+    let goal_spaces = [{ PosX = 30; Width = 60; Ocupation = false }]
+    let obstacles = [turtle1; turtle2; turtle3]
+    let fondo = { Obstacles = Map.ofList [(Rows.Eight,obstacles)]; Time = 60 }
+    let game = { Player = player; Final_row = goal_spaces; Score = 0; Lifes = ThreeLives; Fondo = fondo }
+    let result = checkPlayerLose game
+    printfn "%A" (result = Ok game)
+
+[<Fact>]
+let ``checkPlayerLose en agua ahogado``() = 
+    let player = { PosX = 10; PosY = Rows.Eight; Width = 10 }
+    let turtle1 = createObstacle (100, 190, Rows.Eight, 2, false)
+    let turtle2 = createObstacle (200, 290, Rows.Eight, 2, false)
+    let turtle3 = createObstacle (300, 390, Rows.Eight, 2, false)
+    let goal_spaces = [{ PosX = 30; Width = 60; Ocupation = false }]
+    let obstacles = [turtle1; turtle2; turtle3]
+    let fondo = { Obstacles = Map.ofList [(Rows.Eight,obstacles)]; Time = 60 }
+    let game = { Player = player; Final_row = goal_spaces; Score = 10; Lifes = ThreeLives; Fondo = fondo }
+    let result = checkPlayerLose game
+    let expectedGame = {game with Player = {PosX = WIDTH/2; PosY = Rows.One; Width = 10}; Score = 0; Lifes = TwoLives; Fondo = { game.Fondo with Time = 60 }}
+    Assert.Equal(result, Ok expectedGame)
+
+[<Fact>]
+let ``checkPlayerLose en agua tortuga bajo agua``() = 
+    let player = { PosX = 220; PosY = Rows.Eight; Width = 10 }
+    let turtle1 = createObstacle (100, 190, Rows.Eight, 2, false)
+    let turtle2 = createObstacle (200, 290, Rows.Eight, 2, true)
+    let turtle3 = createObstacle (300, 390, Rows.Eight, 2, false)
+    let goal_spaces = [{ PosX = 30; Width = 60; Ocupation = false }]
+    let obstacles = [turtle1; turtle2; turtle3]
+    let fondo = { Obstacles = Map.ofList [(Rows.Eight,obstacles)]; Time = 60 }
+    let game = { Player = player; Final_row = goal_spaces; Score = 10; Lifes = ThreeLives; Fondo = fondo }
+    let result = checkPlayerLose game
+    let expectedGame = {game with Player = {PosX = WIDTH/2; PosY = Rows.One; Width = 10}; Score = 0; Lifes = TwoLives; Fondo = { game.Fondo with Time = 60 }}
+    Assert.Equal(result, Ok expectedGame)
+
+[<Fact>]
+let ``checkPlayerLose OneLife gameOver``() = 
+    let player = { PosX = 220; PosY = Rows.Eight; Width = 10 }
+    let turtle1 = createObstacle (100, 190, Rows.Eight, 2, false)
+    let turtle2 = createObstacle (200, 290, Rows.Eight, 2, true)
+    let turtle3 = createObstacle (300, 390, Rows.Eight, 2, false)
+    let goal_spaces = [{ PosX = 30; Width = 60; Ocupation = false }]
+    let obstacles = [turtle1; turtle2; turtle3]
+    let fondo = { Obstacles = Map.ofList [(Rows.Eight,obstacles)]; Time = 60 }
+    let game = { Player = player; Final_row = goal_spaces; Score = 0; Lifes = OneLife; Fondo = fondo }
+    let result = checkPlayerLose game
+    Assert.Equal(result, Error "Game Over")
+
+
+[<Fact>]
+let ``checkPlayerLose should return Ok with updated game state when goal is reached - WIN`` () =
+    // Arrange
+    // Define player position
+    let playerPos = Rows.Thirteen
+    // Define game state with goal reached
+    let game_ : GameState =
+        {
+            Player = { PosX = 10; PosY = playerPos; Width = 20 }
+            Final_row = 
+                [
+                    { PosX = 30; Width = 60; Ocupation = true }
+                    { PosX = 150; Width = 60; Ocupation = true }
+                    { PosX = 270; Width = 60; Ocupation = true }
+                    { PosX = 390; Width = 60; Ocupation = true }
+                    { PosX = 510; Width = 60; Ocupation = true }
+                ]
+            Score = 0
+            Lifes = ThreeLives
+            Fondo = { Obstacles = Map.empty; Time = 60 }
+        }
+
+    // Act
+    let result = checkPlayerLose game_
+
+    // Assert
+    match result with
+    | Ok updatedGameState ->
+        // Check if game state is updated after reaching the goal
+        Assert.Equal(1000, updatedGameState.Score)
+        Assert.Equal(ThreeLives, updatedGameState.Lifes)
+        // Check if player's position is reset to Rows.One
+        Assert.Equal(Rows.One, updatedGameState.Player.PosY)
+        // Check if player's X position is reset to WIDTH/2
+        Assert.Equal(WIDTH / 2, updatedGameState.Player.PosX)
+    | Error _ -> Assert.True(false, "Expected Ok but got Error")
+
+[<Fact>]
+let ``checkPlayerLose should return Ok with updated game state when goal is reached - NOT-WIN`` () =
+    // Arrange
+    // Define player position
+    let playerPos = Rows.Thirteen
+    // Define game state with goal reached
+    let game_ : GameState =
+        {
+            Player = { PosX = 40; PosY = playerPos; Width = 10 }
+            Final_row = 
+                [
+                    { PosX = 30; Width = 60; Ocupation = false }
+                    { PosX = 150; Width = 60; Ocupation = true }
+                    { PosX = 270; Width = 60; Ocupation = true }
+                    { PosX = 390; Width = 60; Ocupation = true }
+                    { PosX = 510; Width = 60; Ocupation = true }
+                ]
+            Score = 0
+            Lifes = ThreeLives
+            Fondo = { Obstacles = Map.empty; Time = 30 }
+        }
+
+    // Act
+    let result = checkPlayerLose game_
+    
+    // Assert
+    match result with
+    | Ok updatedGameState ->
+        // Check if game state is updated after reaching the goal
+        Assert.Equal(50, updatedGameState.Score)
+        Assert.Equal(ThreeLives, updatedGameState.Lifes)
+        // Check if player's position is reset to Rows.One
+        Assert.Equal(Rows.One, updatedGameState.Player.PosY)
+        // Check if player's X position is reset to WIDTH/2
+        Assert.Equal(WIDTH / 2, updatedGameState.Player.PosX)
+    | Error _ -> Assert.True(false, "Expected Ok but got Error")
