@@ -51,12 +51,6 @@ module Functions =
     // Función que mueve al jugador en la dirección indicada
     let movePlayer (player : Player) (dir: Direction) : Player = 
         match dir with
-        | Up -> 
-            let newPosY = moveUp player.PosY
-            {player with PosY = newPosY}
-        | Down -> 
-            let newPosY = moveDown player.PosY
-            {player with PosY = newPosY}
         // Si se sale de la pantalla jugable no se mueve
         | Up -> let newPosY = moveUp player.PosY
                 {player with PosY = newPosY}
@@ -189,11 +183,9 @@ module Functions =
         let PosY = player.PosY
         match PosY with
         | One | Seven -> match game.Lifes with
-                        | GameOver -> Error "Game Over"
-                        | _ -> let newGame = updateLives game
-                               let newPlayer = {player with PosX = WIDTH/2; PosY = Rows.One}
-                               Ok {newGame with Player = newPlayer}
-                               
+                         | GameOver -> Error "Game Over"
+                         | _ -> Ok game
+
         | Two | Three | Four | Five | Six ->    let obstacles = Map.find PosY game.Fondo.Obstacles
                                                 let collision = List.exists (checkCollision player) obstacles
                                                 if collision then
