@@ -60,45 +60,44 @@ module Functions =
         | Left -> if player.PosX - 50 < WIDTH_PLAYABLE_LEFT then player else {player with PosX = player.PosX - 50}
         | Right -> if player.PosX + 50 > WIDTH_PLAYABLE_RIGHT then player else {player with PosX = player.PosX + 50} 
 
-    // Función que extrae el obstáculo base de un obstáculo
-    let matchObstacle obstacle: ObstacleBase =
+    // Función auxiliar para extraer el obstáculo de un tipo Obstacle cuando no se necesite distinguir entre Up y Underwater
+    let matchObstacle (obstacle : Obstacle) : ObstacleBase = 
         match obstacle with
         | Afloat obstacle -> obstacle
         | Underwater obstacle -> obstacle
 
     // Función que mueve un obstáculo y establece las condiciones periódicas de contorno
-    let moveObstacle (obstacle: Obstacle) : Obstacle =
+    let moveObstacle (obstacleU: Obstacle) : Obstacle =
         let updatePosition (obstacle: ObstacleBase): ObstacleBase =
             let x_left_new : int = (obstacle.x_left + obstacle.Speed) % WIDTH 
             let x_right_new : int = (obstacle.x_right + obstacle.Speed) % WIDTH
             {obstacle with x_left = x_left_new; x_right = x_right_new}
 
-        match obstacle with
-        | Afloat obstacle ->  Afloat (updatePosition obstacle |> Up)
-        | Underwater obstacle ->  Underwater (updatePosition obstacle |> Underwater)
+        match obstacleU with
+        | Afloat obstacle ->  Afloat (updatePosition obstacle)
+        | Underwater obstacle ->  Underwater (updatePosition obstacle)
     
 
     ////////////////// Funciones de cheque colisión o ahogamiento del jugador en la posición actual /////////////////////////
 
     // Chequeamos que haya colisión entre el jugador y el obstáculo
-    let checkCollision (player : Player) (obstacle_ : Obstacle) : bool=
+    let checkCollision (player : Player) (obstacleU : Obstacle) : bool=
         // Si choca por la izquierda 
 
-        obstacle = matchObstacle obstacle_
+        let obstacle = matchObstacle obstacleU
         let collisionL = player.PosX + player.Width/2 >= obstacle.x_left && player.PosX + player.Width/2 <= obstacle.x_right
         let collisionR = player.PosX - player.Width/2 >= obstacle.x_left && player.PosX - player.Width/2 <= obstacle.x_right
         collisionL || collisionR
 
     // Chequeo si el jugador no está arriba de un tronco o una tortuga
-    let checkNotUpLogTurtle (player : Player) (obstacle_ : Obstacle) : bool = 
-
+    let checkNotUpLogTurtle (player : Player) (obstacleU : Obstacle) : bool = 
         // Si la tortuga no está sumergida veo que pasa
-        match obstacle_ with
+        match obstacleU with
         | Afloat obstacle -> if obstacle.x_left > obstacle.x_right then
                                 // Si el extremo derecho del jugador está a la derecha del obstáculo me ahogo entonces devuelve true
                                 // En caso contrario no me ahogo y devuelve false
                                 (obstacle.x_right < player.PosX + player.Width / 2) && (obstacle.x_left > player.PosX - player.Width / 2)
-                            else 
+                             else 
                                 (obstacle.x_left > player.PosX - player.Width / 2) || (obstacle.x_right < player.PosX + player.Width / 2)
         | Underwater obstacle -> true
 
@@ -113,9 +112,9 @@ module Functions =
         else
             turtle
         
-//     // Función para actualizar el fondo del juego, los obstáculos y el estado de las tortugas
+    // Función para actualizar el fondo del juego, los obstáculos y el estado de las tortugas
     let updateFondo (fondo : Fondo) = 
-         // Cambiamos todos los obstáculos moviendolos
+        // Cambiamos todos los obstáculos moviendolos
         let movedObstacles = Map.map (fun _ lst -> lst |> List.map moveObstacle) fondo.Obstacles
         
         // Cambiamos el estado de las tortugas en las filas 8 y 11 cada 10 segundos
@@ -186,7 +185,8 @@ module Functions =
                 match dir with
                 | Some d -> let newFondo = updateFondo game.Fondo
                             let newPlayer = movePlayer game.Player d
-                            CheckTime {game with Player = newPlayer; Fondo = newFondo; Score = game.Score+10}
+                            let newScore = game.Score + 10
+                            CheckTime {game with Player = newPlayer; Fondo = newFondo; Score = newScore}
                         
                 | None -> let newFondo = updateFondo game.Fondo
                           CheckTime {game with Fondo = newFondo}
@@ -200,19 +200,16 @@ module Functions =
         | One | Seven -> match game.Lifes with
                          | GameOver -> Error "Game Over"
                          | _ -> Ok game
-
-        
-        | Two | Three | Four | Five | Six ->   
-
-                                                let obstacles = Map.find PosY obstaculos_lista
+                               
+        | Two | Three | Four | Five | Six ->    let obstacles = Map.find PosY game.Fondo.Obstacles
                                                 let collision = List.exists (checkCollision player) obstacles
                                                 if collision then
                                                     let newGame = updateLives game
-                                                    let newScore = newGame.Score-10
                                                     match newGame.Lifes with
                                                     | GameOver -> Error "Game Over"
                                                     | _ -> let newPlayer = {player with PosX = WIDTH/2; PosY = Rows.One}
-                                                           Ok {newGame with Player = newPlayer; Score  = newScore}
+                                                           let newScore = newGame.Score - 10
+                                                           Ok {newGame with Player = newPlayer; Score = newScore}
                                                 else
                                                     Ok game
 

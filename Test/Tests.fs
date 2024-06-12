@@ -19,15 +19,21 @@ let player : Player = { PosX = WIDTH / 2;
 // Función para crear un obstáculo dado su posición central
 // Función para crear un obstáculo
 let createObstacle (x_left, x_right, posY, speed, underwater) : Obstacle  = 
-    let obstacle: Obstacle = 
-        { 
-            x_left = x_left; 
-            x_right = x_right; 
-            PosY = posY;
-            Speed = speed; 
-            Underwater = underwater 
-        }
-    obstacle
+    if underwater then
+        let obstacle: Obstacle = 
+            Underwater { x_left = x_left; 
+                         x_right = x_right; 
+                         PosY = posY;
+                         Speed = speed }
+        obstacle
+    else
+        let obstacle: Obstacle = 
+            Afloat { 
+                    x_left = x_left; 
+                    x_right = x_right; 
+                    PosY = posY;
+                    Speed = speed}
+        obstacle
 
 // Definamos los obstáculos fila por fila 
 let row2_Auto1 = createObstacle (200, 240, Rows.Two, 1, false)
@@ -59,30 +65,30 @@ let row6_Auto2 = createObstacle (400, 460, Rows.Six, 1, false)
 let row6 = [row6_Auto1; row6_Auto2]
 
 // Cada tortuga mide 60 -> acá tenemos conjuntos de dos tortugas
-let row8_Turtle1 = createObstacle (100, 190, Rows.Eight, 2, true)
+let row8_Turtle1 = createObstacle (100, 190, Rows.Eight, 2, false)
 let row8_Turtle2 = createObstacle (200, 290, Rows.Eight, 2, true)
 
 let row8 = [row8_Turtle1; row8_Turtle2]
 
-let row9_log1 = createObstacle (100, 170, Rows.Nine, 1, true)
-let row9_log2 = createObstacle (300, 370, Rows.Nine, 1, true)
-let row9_log3 = createObstacle (500, 570, Rows.Nine, 1, true)
+let row9_log1 = createObstacle (100, 170, Rows.Nine, 1, false)
+let row9_log2 = createObstacle (300, 370, Rows.Nine, 1, false)
+let row9_log3 = createObstacle (500, 570, Rows.Nine, 1, false)
 
 let row9 = [row9_log1; row9_log2; row9_log3]
 
-let row10_log1 = createObstacle (100, 230, Rows.Ten, 2, true)
+let row10_log1 = createObstacle (100, 230, Rows.Ten, 2, false)
 
 let row10 = [row10_log1]
 
-let row11_Turtle1 = createObstacle (100, 160, Rows.Eleven, 1, true)
+let row11_Turtle1 = createObstacle (100, 160, Rows.Eleven, 1, false)
 let row11_Turtle2 = createObstacle (200, 260, Rows.Eleven, 1, true)
-let row11_Turtle3 = createObstacle (300, 360, Rows.Eleven, 1, true)
+let row11_Turtle3 = createObstacle (300, 360, Rows.Eleven, 1, false)
 
 let row11 = [row11_Turtle1; row11_Turtle2; row11_Turtle3]
 
-let row12_log1 = createObstacle (250, 320, Rows.Twelve, 1, true)
-let row12_log2 = createObstacle (350, 420, Rows.Twelve, 1, true)
-let row12_log3 = createObstacle (450, 520, Rows.Twelve, 1, true)
+let row12_log1 = createObstacle (250, 320, Rows.Twelve, 1, false)
+let row12_log2 = createObstacle (350, 420, Rows.Twelve, 1, false)
+let row12_log3 = createObstacle (450, 520, Rows.Twelve, 1, false)
 
 let row12 = [row12_log1; row12_log2; row12_log3]
 
@@ -163,8 +169,8 @@ let ``Move player beyond left limit test`` () =
 [<Fact>]
 let ``Move obstacle test`` () =
     // Arrange
-    let initialObstacle = { x_left = 10; x_right = 20; PosY = Rows.Two; Speed = 5; Underwater = false }
-    let expectedObstacle = { x_left = 15; x_right = 25; PosY = Rows.Two; Speed = 5; Underwater = false } // El obstáculo se espera que se mueva hacia la derecha
+    let initialObstacle = Afloat { x_left = 10; x_right = 20; PosY = Rows.Two; Speed = 5}
+    let expectedObstacle = Afloat { x_left = 15; x_right = 25; PosY = Rows.Two; Speed = 5} // El obstáculo se espera que se mueva hacia la derecha
 
     // Act
     let movedObstacle = moveObstacle initialObstacle
@@ -177,8 +183,8 @@ let ``Move obstacle test`` () =
 let ``Move obstacle beyond screen width test`` () =
     // Arrange
     let screenWidth = 800 // Ancho de la pantalla
-    let initialObstacle = { x_left = screenWidth - 10; x_right = screenWidth - 5; PosY = Rows.One; Speed = 10; Underwater = false }
-    let expectedObstacle = { x_left = 0; x_right = 5; PosY = Rows.One; Speed = 10; Underwater = false } // El obstáculo se espera que vuelva al inicio de la pantalla
+    let initialObstacle = Afloat { x_left = screenWidth - 10; x_right = screenWidth - 5; PosY = Rows.One; Speed = 10}
+    let expectedObstacle = Afloat { x_left = 0; x_right = 5; PosY = Rows.One; Speed = 10} // El obstáculo se espera que vuelva al inicio de la pantalla
 
     // Act
     let movedObstacle = moveObstacle initialObstacle
@@ -193,7 +199,7 @@ let ``Move obstacle beyond screen width test`` () =
 let ``Check collision should detect collision correctly`` () =
     // Arrange
     let player = { PosX = 150; PosY = Rows.Five; Width = 10 } // Jugador cerca del obstáculo
-    let obstacle = { x_left = 140; x_right = 160; PosY = Rows.Five; Speed = 0; Underwater = false } // Obstáculo cerca del jugador
+    let obstacle = Afloat { x_left = 140; x_right = 160; PosY = Rows.Five; Speed = 0 } // Obstáculo cerca del jugador
 
     // Act
     let result = checkCollision player obstacle
@@ -206,7 +212,7 @@ let ``Check collision should detect collision correctly`` () =
 let ``Check collision should detect collision right`` () =
     // Arrange
     let player = { PosX = 160; PosY = Rows.Five; Width = 10 } // El jugador está a la derecha del obstáculo
-    let obstacle = { x_left = 140; x_right = 160; PosY = Rows.Five; Speed = 0; Underwater = false } // Obstáculo cerca del jugador
+    let obstacle = Afloat { x_left = 140; x_right = 160; PosY = Rows.Five; Speed = 0} // Obstáculo cerca del jugador
 
     // Act
     let result = checkCollision player obstacle
@@ -218,7 +224,7 @@ let ``Check collision should detect collision right`` () =
 let ``Check collision should detect collision left`` () =
     // Arrange
     let player = { PosX = 140; PosY = Rows.Five; Width = 10 } // El jugador está a la izquierda del obstáculo
-    let obstacle = { x_left = 140; x_right = 160; PosY = Rows.Five; Speed = 0; Underwater = false } // Obstáculo cerca del jugador
+    let obstacle = Afloat { x_left = 140; x_right = 160; PosY = Rows.Five; Speed = 0} // Obstáculo cerca del jugador
 
     // Act
     let result = checkCollision player obstacle
@@ -230,7 +236,7 @@ let ``Check collision should detect collision left`` () =
 let ``Check collision should detect collision border right`` () =
     // Arrange
     let player = { PosX = 165; PosY = Rows.Five; Width = 10 } // El jugador está en el borde derecho del obstáculo
-    let obstacle = { x_left = 140; x_right = 160; PosY = Rows.Five; Speed = 0; Underwater = false } // Obstáculo cerca del jugador
+    let obstacle = Afloat { x_left = 140; x_right = 160; PosY = Rows.Five; Speed = 0} // Obstáculo cerca del jugador
 
     // Act
     let result = checkCollision player obstacle
@@ -242,7 +248,7 @@ let ``Check collision should detect collision border right`` () =
 let ``Check collision should detect collision border left`` () =
     // Arrange
     let player = { PosX = 135; PosY = Rows.Five; Width = 10 } // El jugador está en el borde izquierdo del obstáculo
-    let obstacle = { x_left = 140; x_right = 160; PosY = Rows.Five; Speed = 0; Underwater = false } // Obstáculo cerca del jugador
+    let obstacle = Afloat { x_left = 140; x_right = 160; PosY = Rows.Five; Speed = 0} // Obstáculo cerca del jugador
 
     // Act
     let result = checkCollision player obstacle
@@ -254,7 +260,7 @@ let ``Check collision should detect collision border left`` () =
 let ``Check collision should detect no collision left`` () =
     // Arrange
     let player = { PosX = 130; PosY = Rows.Five; Width = 10 } // El jugador está lejos del obstáculo a la izquierda
-    let obstacle = { x_left = 140; x_right = 160; PosY = Rows.Five; Speed = 0; Underwater = false } // Obstáculo cerca del jugador
+    let obstacle = Afloat { x_left = 140; x_right = 160; PosY = Rows.Five; Speed = 0} // Obstáculo cerca del jugador
 
     // Act
     let result = checkCollision player obstacle
@@ -266,7 +272,7 @@ let ``Check collision should detect no collision left`` () =
 let ``Check collision should detect no collision right`` () =
     // Arrange
     let player = { PosX = 170; PosY = Rows.Five; Width = 10 } // El jugador está lejos del obstáculo a la derecha
-    let obstacle = { x_left = 140; x_right = 160; PosY = Rows.Five; Speed = 0; Underwater = false } // Obstáculo cerca del jugador
+    let obstacle = Afloat { x_left = 140; x_right = 160; PosY = Rows.Five; Speed = 0} // Obstáculo cerca del jugador
 
     // Act
     let result = checkCollision player obstacle
@@ -281,7 +287,7 @@ let ``Check collision should detect no collision right`` () =
 let ``Check not up log turtle should detect player completely above log`` () =
     // Arrange
     let player = { PosX = 150; PosY = Rows.Five; Width = 10 }
-    let obstacle = { x_left = 100; x_right = 200; PosY = Rows.Five; Speed = 0; Underwater = false }
+    let obstacle = Afloat { x_left = 100; x_right = 200; PosY = Rows.Five; Speed = 0}
 
     // Act
     let result = checkNotUpLogTurtle player obstacle
@@ -293,7 +299,7 @@ let ``Check not up log turtle should detect player completely above log`` () =
 let ``Check not up log turtle should detect player border right above log`` () =
     // Arrange
     let player = { PosX = 195; PosY = Rows.Five; Width = 10 }
-    let obstacle = { x_left = 100; x_right = 200; PosY = Rows.Five; Speed = 0; Underwater = false }
+    let obstacle =  Afloat { x_left = 100; x_right = 200; PosY = Rows.Five; Speed = 0}
 
     // Act
     let result = checkNotUpLogTurtle player obstacle
@@ -305,7 +311,7 @@ let ``Check not up log turtle should detect player border right above log`` () =
 let ``Check not up log turtle should detect player border left above log`` () =
     // Arrange
     let player = { PosX = 105; PosY = Rows.Five; Width = 10 }
-    let obstacle = { x_left = 100; x_right = 200; PosY = Rows.Five; Speed = 0; Underwater = false }
+    let obstacle =  Afloat { x_left = 100; x_right = 200; PosY = Rows.Five; Speed = 0}
 
     // Act
     let result = checkNotUpLogTurtle player obstacle
@@ -317,7 +323,7 @@ let ``Check not up log turtle should detect player border left above log`` () =
 let ``Check not up log turtle should detect player partially right above log`` () =
     // Arrange
     let player = { PosX = 200; PosY = Rows.Five; Width = 10 }
-    let obstacle = { x_left = 100; x_right = 200; PosY = Rows.Five; Speed = 0; Underwater = false }
+    let obstacle =  Afloat { x_left = 100; x_right = 200; PosY = Rows.Five; Speed = 0}
 
     // Act
     let result = checkNotUpLogTurtle player obstacle
@@ -329,7 +335,7 @@ let ``Check not up log turtle should detect player partially right above log`` (
 let ``Check not up log turtle should detect player partially left above log`` () =
     // Arrange
     let player = { PosX = 100; PosY = Rows.Five; Width = 10 }
-    let obstacle = { x_left = 100; x_right = 200; PosY = Rows.Five; Speed = 0; Underwater = false }
+    let obstacle =  Afloat{ x_left = 100; x_right = 200; PosY = Rows.Five; Speed = 0}
 
     // Act
     let result = checkNotUpLogTurtle player obstacle
@@ -341,7 +347,7 @@ let ``Check not up log turtle should detect player partially left above log`` ()
 let ``Check not up log turtle should detect player completely right from log`` () =
     // Arrange
     let player = { PosX = 250; PosY = Rows.Five; Width = 10 }
-    let obstacle = { x_left = 100; x_right = 200; PosY = Rows.Five; Speed = 0; Underwater = false }
+    let obstacle =  Afloat{ x_left = 100; x_right = 200; PosY = Rows.Five; Speed = 0}
 
     // Act
     let result = checkNotUpLogTurtle player obstacle
@@ -353,7 +359,7 @@ let ``Check not up log turtle should detect player completely right from log`` (
 let ``Check not up log turtle should detect player completely left from log`` () =
     // Arrange
     let player = { PosX = 50; PosY = Rows.Five; Width = 10 }
-    let obstacle = { x_left = 100; x_right = 200; PosY = Rows.Five; Speed = 0; Underwater = false }
+    let obstacle =  Afloat{ x_left = 100; x_right = 200; PosY = Rows.Five; Speed = 0}
 
     // Act
     let result = checkNotUpLogTurtle player obstacle
@@ -365,7 +371,7 @@ let ``Check not up log turtle should detect player completely left from log`` ()
 let ``Check not up log turtle should detect player inside submerged turtle`` () =
     // Arrange
     let player = { PosX = 150; PosY = Rows.Five; Width = 50 }
-    let obstacle = { x_left = 100; x_right = 200; PosY = Rows.Five; Speed = 0; Underwater = true }
+    let obstacle =  Underwater { x_left = 100; x_right = 200; PosY = Rows.Five; Speed = 0}
 
     // Act
     let result = checkNotUpLogTurtle player obstacle
@@ -377,7 +383,7 @@ let ``Check not up log turtle should detect player inside submerged turtle`` () 
 let ``Check not up log turtle should detect player outside submerged turtle`` () =
     // Arrange
     let player = { PosX = 250; PosY = Rows.Five; Width = 50 }
-    let obstacle = { x_left = 100; x_right = 200; PosY = Rows.Five; Speed = 0; Underwater = true }
+    let obstacle =  Underwater { x_left = 100; x_right = 200; PosY = Rows.Five; Speed = 0}
 
     // Act
     let result = checkNotUpLogTurtle player obstacle
@@ -388,7 +394,7 @@ let ``Check not up log turtle should detect player outside submerged turtle`` ()
 let ``border checkNotUpLogTurtle should detect player completely above log left`` () =
     // Arrange
     let player = { PosX = 50; PosY = Rows.Five; Width = 10 }
-    let obstacle = { x_left = 700; x_right = 100; PosY = Rows.Five; Speed = 0; Underwater = false }
+    let obstacle =  Afloat { x_left = 700; x_right = 100; PosY = Rows.Five; Speed = 0 }
 
     // Act
     let result = checkNotUpLogTurtle player obstacle
@@ -400,7 +406,7 @@ let ``border checkNotUpLogTurtle should detect player completely above log left`
 let ``border checkNotUpLogTurtle should detect player completely above log right`` () =
     // Arrange
     let player = { PosX = 750; PosY = Rows.Five; Width = 10 }
-    let obstacle = { x_left = 700; x_right = 100; PosY = Rows.Five; Speed = 0; Underwater = false }
+    let obstacle =  Afloat{ x_left = 700; x_right = 100; PosY = Rows.Five; Speed = 0 }
 
     // Act
     let result = checkNotUpLogTurtle player obstacle
@@ -412,7 +418,7 @@ let ``border checkNotUpLogTurtle should detect player completely above log right
 let ``border checkNotUpLogTurtle should detect player border right above log left`` () =
     // Arrange
     let player = { PosX = 95; PosY = Rows.Five; Width = 10 }
-    let obstacle = { x_left = 700; x_right = 100; PosY = Rows.Five; Speed = 0; Underwater = false }
+    let obstacle =  Afloat{ x_left = 700; x_right = 100; PosY = Rows.Five; Speed = 0 }
 
     // Act
     let result = checkNotUpLogTurtle player obstacle
@@ -424,7 +430,7 @@ let ``border checkNotUpLogTurtle should detect player border right above log lef
 let ``border checkNotUpLogTurtle should detect player border left above log right`` () =
     // Arrange
     let player = { PosX = 705; PosY = Rows.Five; Width = 10 }
-    let obstacle = { x_left = 700; x_right = 100; PosY = Rows.Five; Speed = 0; Underwater = false }
+    let obstacle =  Afloat{ x_left = 700; x_right = 100; PosY = Rows.Five; Speed = 0 }
 
     // Act
     let result = checkNotUpLogTurtle player obstacle
@@ -436,7 +442,7 @@ let ``border checkNotUpLogTurtle should detect player border left above log righ
 let ``border checkNotUpLogTurtle should detect player partially right above log left`` () =
     // Arrange
     let player = { PosX = 100; PosY = Rows.Five; Width = 10 }
-    let obstacle = { x_left = 700; x_right = 100; PosY = Rows.Five; Speed = 0; Underwater = false }
+    let obstacle =  Afloat{ x_left = 700; x_right = 100; PosY = Rows.Five; Speed = 0 }
 
     // Act
     let result = checkNotUpLogTurtle player obstacle
@@ -448,7 +454,7 @@ let ``border checkNotUpLogTurtle should detect player partially right above log 
 let ``border checkNotUpLogTurtle should detect player partially left above log right`` () =
     // Arrange
     let player = { PosX = 700; PosY = Rows.Five; Width = 10 }
-    let obstacle = { x_left = 700; x_right = 100; PosY = Rows.Five; Speed = 0; Underwater = false }
+    let obstacle =  Afloat{ x_left = 700; x_right = 100; PosY = Rows.Five; Speed = 0 }
 
     // Act
     let result = checkNotUpLogTurtle player obstacle
@@ -460,7 +466,7 @@ let ``border checkNotUpLogTurtle should detect player partially left above log r
 let ``border checkNotUpLogTurtle should detect player completely right from log left`` () =
     // Arrange
     let player = { PosX = 105; PosY = Rows.Five; Width = 10 }
-    let obstacle = { x_left = 700; x_right = 100; PosY = Rows.Five; Speed = 0; Underwater = false }
+    let obstacle =  Afloat{ x_left = 700; x_right = 100; PosY = Rows.Five; Speed = 0 }
 
     // Act
     let result = checkNotUpLogTurtle player obstacle
@@ -472,7 +478,7 @@ let ``border checkNotUpLogTurtle should detect player completely right from log 
 let ``border checkNotUpLogTurtle should detect player completely left from log right`` () =
     // Arrange
     let player = { PosX = 695; PosY = Rows.Five; Width = 10 }
-    let obstacle = { x_left = 700; x_right = 100; PosY = Rows.Five; Speed = 0; Underwater = false }
+    let obstacle =  Afloat{ x_left = 700; x_right = 100; PosY = Rows.Five; Speed = 0 }
 
     // Act
     let result = checkNotUpLogTurtle player obstacle
@@ -498,18 +504,25 @@ let ``updateFondo should move obstacles and change turtle states`` () =
             Obstacles = 
                 Map.ofList 
                     [ 
-                        Rows.Two, [{ x_left = 100; x_right = 200; PosY = Two; Speed = 2; Underwater = false }];
-                        Rows.Eight, [{ x_left = 100; x_right = 200; PosY = Eight; Speed = 2; Underwater = false }; {x_left = 250; x_right = 350; PosY = Eight; Speed = 2; Underwater = false}];
-                        Rows.Eleven, [{ x_left = 100; x_right = 200; PosY = Eleven; Speed = 2; Underwater = false}; {x_left = 250; x_right = 350; PosY = Eight; Speed = 2; Underwater = false}]
+                        Rows.Two, [Afloat { x_left = 100; x_right = 200; PosY = Two; Speed = 2 }];
+                        Rows.Eight, [Afloat { x_left = 100; x_right = 200; PosY = Eight; Speed = 2 }; Afloat {x_left = 250; x_right = 350; PosY = Eight; Speed = 2}];
+                        Rows.Eleven, [Afloat { x_left = 100; x_right = 200; PosY = Eleven; Speed = 2}; Afloat {x_left = 250; x_right = 350; PosY = Eight; Speed = 2}]
                     ]
             Time = 10
         }
     let updatedFondo = updateFondo fondo
-    let notUpdatedRowTwo = updatedFondo.Obstacles.[Rows.Two].[0].Underwater
-    let notUpdatedRowEight = updatedFondo.Obstacles.[Rows.Eight].[0].Underwater
-    let UpdatedRowEight = updatedFondo.Obstacles.[Rows.Eight].[1].Underwater
-    let notUpdatedRowEleven = updatedFondo.Obstacles.[Rows.Eleven].[0].Underwater
-    let UpdatedRowEleven = updatedFondo.Obstacles.[Rows.Eleven].[1].Underwater
+
+    let isUnderwater (obstacle: Obstacle) = 
+        match obstacle with
+        | Underwater _ -> true
+        | _ -> false
+
+    let notUpdatedRowTwo = updatedFondo.Obstacles.[Rows.Two].[0] |> isUnderwater
+    let notUpdatedRowEight = updatedFondo.Obstacles.[Rows.Eight].[0] |> isUnderwater
+    let UpdatedRowEight = updatedFondo.Obstacles.[Rows.Eight].[1] |> isUnderwater
+    let notUpdatedRowEleven = updatedFondo.Obstacles.[Rows.Eleven].[0] |> isUnderwater
+    let UpdatedRowEleven = updatedFondo.Obstacles.[Rows.Eleven].[1] |> isUnderwater
+
     Assert.False(notUpdatedRowTwo)
     Assert.False(notUpdatedRowEight)
     Assert.True(UpdatedRowEight)
@@ -707,8 +720,8 @@ let ``checkPlayerLose should return Ok with updated game state when there's a co
     // Define player position
     let playerPos = Rows.Two
     // Define obstacles with collision
-    let obstacleWithCollision1 = { x_left = 50; x_right = 100; PosY = playerPos; Speed = 0; Underwater = false }
-    let obstacleWithCollision2 = { x_left = 200; x_right = 250; PosY = playerPos; Speed = 0; Underwater = false }
+    let obstacleWithCollision1 = Afloat { x_left = 50; x_right = 100; PosY = playerPos; Speed = 0 }
+    let obstacleWithCollision2 = Afloat { x_left = 200; x_right = 250; PosY = playerPos; Speed = 0 }
     // Create the map of rows to lists of obstacles
     let obstaclesMap = 
         [(playerPos, [obstacleWithCollision1; obstacleWithCollision2])] 
@@ -748,7 +761,7 @@ let ``checkPlayerLose should return GameOver when there's a collision and only o
     // Define player position
     let playerPos = Rows.Two
     // Define obstacles with collision
-    let obstacleWithCollision = { x_left = 50; x_right = 100; PosY = playerPos; Speed = 0; Underwater = false }
+    let obstacleWithCollision = Afloat { x_left = 50; x_right = 100; PosY = playerPos; Speed = 0}
     // Create the map of rows to lists of obstacles
     let obstaclesMap = [(playerPos, [obstacleWithCollision])] |> Map.ofList
     // Define game state with collision and only one life remaining
