@@ -177,7 +177,7 @@ module Functions =
                 match dir with
                 | Some d -> let newFondo = updateFondo game.Fondo
                             let newPlayer = movePlayer game.Player d
-                            CheckTime {game with Player = newPlayer; Fondo = newFondo}
+                            CheckTime {game with Player = newPlayer; Fondo = newFondo; Score = game.Score+10}
                         
                 | None -> let newFondo = updateFondo game.Fondo
                           CheckTime {game with Fondo = newFondo}
@@ -193,11 +193,11 @@ module Functions =
                                                 let collision = List.exists (checkCollision player) obstacles
                                                 if collision then
                                                     let newGame = updateLives game
+                                                    let newScore = newGame.Score-10
                                                     match newGame.Lifes with
                                                     | GameOver -> Error "Game Over"
                                                     | _ -> let newPlayer = {player with PosX = WIDTH/2; PosY = Rows.One}
-                                                           let newScore = game.Score + 10
-                                                           Ok {newGame with Player = newPlayer; Score = newScore}
+                                                           Ok {newGame with Player = newPlayer; Score  = newScore}
                                                 else
                                                     Ok game
 
