@@ -16,6 +16,7 @@ let player : Player = { PosX = WIDTH / 2;
                         PosY = Rows.One
                         Width = 40}
 
+
 // Función para crear un obstáculo dado su posición central
 // Función para crear un obstáculo
 let createObstacle (x_left, x_right, posY, speed, underwater) : Obstacle  = 
