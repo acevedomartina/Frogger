@@ -34,14 +34,16 @@ module Types =
     | Right
 
     // Tipo que define un obstáculo
-    type Obstacle =
+    type ObstacleBase =
         {
             x_left: int // Extremo izquierdo del obstáculo
             x_right: int // Extremo derecho del obstáculo
             PosY: Rows // Posición de la fila del obstáculo
             Speed: int // Velocidad del obstáculo
-            Underwater: bool // Indica si el obstáculo está debajo del agua
         }
+    type Obstacle =
+    | Up of Obstacle
+    | Underwater of Obstacle
 
     // Tipo que define la cantidad de vidas restantes
     type LivesRemaining =

@@ -60,40 +60,56 @@ module Functions =
         | Left -> if player.PosX - 50 < WIDTH_PLAYABLE_LEFT then player else {player with PosX = player.PosX - 50}
         | Right -> if player.PosX + 50 > WIDTH_PLAYABLE_RIGHT then player else {player with PosX = player.PosX + 50} 
 
+    // Función que extrae el obstáculo base de un obstáculo
+    let matchObstacle obstacle: ObstacleBase =
+        match obstacle with
+        | Afloat obstacle -> obstacle
+        | Underwater obstacle -> obstacle
+
     // Función que mueve un obstáculo y establece las condiciones periódicas de contorno
     let moveObstacle (obstacle: Obstacle) : Obstacle =
-        let x_left_new : int = (obstacle.x_left + obstacle.Speed) % WIDTH 
-        let x_right_new : int = (obstacle.x_right + obstacle.Speed) % WIDTH
-        {obstacle with x_left = x_left_new; x_right = x_right_new}
+        let updatePosition (obstacle: ObstacleBase): ObstacleBase =
+            let x_left_new : int = (obstacle.x_left + obstacle.Speed) % WIDTH 
+            let x_right_new : int = (obstacle.x_right + obstacle.Speed) % WIDTH
+            {obstacle with x_left = x_left_new; x_right = x_right_new}
+
+        match obstacle with
+        | Afloat obstacle ->  Afloat (updatePosition obstacle |> Up)
+        | Underwater obstacle ->  Underwater (updatePosition obstacle |> Underwater)
+    
 
     ////////////////// Funciones de cheque colisión o ahogamiento del jugador en la posición actual /////////////////////////
 
     // Chequeamos que haya colisión entre el jugador y el obstáculo
-    let checkCollision (player : Player) (obstacle : Obstacle) : bool=
+    let checkCollision (player : Player) (obstacle_ : Obstacle) : bool=
         // Si choca por la izquierda 
+
+        obstacle = matchObstacle obstacle_
         let collisionL = player.PosX + player.Width/2 >= obstacle.x_left && player.PosX + player.Width/2 <= obstacle.x_right
         let collisionR = player.PosX - player.Width/2 >= obstacle.x_left && player.PosX - player.Width/2 <= obstacle.x_right
         collisionL || collisionR
 
     // Chequeo si el jugador no está arriba de un tronco o una tortuga
-    let checkNotUpLogTurtle (player : Player) (obstacle : Obstacle) : bool = 
+    let checkNotUpLogTurtle (player : Player) (obstacle_ : Obstacle) : bool = 
+
         // Si la tortuga no está sumergida veo que pasa
-        if not obstacle.Underwater then
-            if obstacle.x_left > obstacle.x_right then
-                // Si el extremo derecho del jugador está a la derecha del obstáculo me ahogo entonces devuelve true
-                // En caso contrario no me ahogo y devuelve false
-                (obstacle.x_right < player.PosX + player.Width / 2) && (obstacle.x_left > player.PosX - player.Width / 2)
-            else 
-                (obstacle.x_left > player.PosX - player.Width / 2) || (obstacle.x_right < player.PosX + player.Width / 2)    
-        else
-            true
+        match obstacle_ with
+        | Afloat obstacle -> if obstacle.x_left > obstacle.x_right then
+                                // Si el extremo derecho del jugador está a la derecha del obstáculo me ahogo entonces devuelve true
+                                // En caso contrario no me ahogo y devuelve false
+                                (obstacle.x_right < player.PosX + player.Width / 2) && (obstacle.x_left > player.PosX - player.Width / 2)
+                            else 
+                                (obstacle.x_left > player.PosX - player.Width / 2) || (obstacle.x_right < player.PosX + player.Width / 2)
+        | Underwater obstacle -> true
 
     ////////////////// Funciones de actualización del fondo /////////////////////////
 
-//     // Función para cambiar el estado de la tortuga i-ésima cada 10 segundos
-    let changeTurtleState (tiempo : int) (turtle : Obstacle) : Obstacle = 
+    // Función para cambiar el estado de la tortuga i-ésima cada 10 segundos
+    let changeTurtleState (tiempo : int) (turtle: Obstacle) : Obstacle = 
         if tiempo % 10 = 0 then
-            {turtle with Underwater = not turtle.Underwater}
+            match turtle with
+            | Underwater turtle -> Afloat turtle
+            | Afloat turtle -> Underwater turtle
         else
             turtle
         
@@ -185,7 +201,10 @@ module Functions =
                          | GameOver -> Error "Game Over"
                          | _ -> Ok game
 
-        | Two | Three | Four | Five | Six ->    let obstacles = Map.find PosY game.Fondo.Obstacles
+        
+        | Two | Three | Four | Five | Six ->   
+
+                                                let obstacles = Map.find PosY obstaculos_lista
                                                 let collision = List.exists (checkCollision player) obstacles
                                                 if collision then
                                                     let newGame = updateLives game
