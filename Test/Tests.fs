@@ -1,17 +1,15 @@
 module Tests
 
 open Xunit
-open Frogger.Modulos.Functions
-open Frogger.Modulos.Types
+open Frogger.Modulos.Module_Grid
+open Frogger.Modulos.Module_Fondo
+open Frogger.Modulos.Module_Player
+open Frogger.Modulos.Module_Interactions
+open Frogger.Modulos.Module_Game
+// open Frogger.Modulos.Module_Initial_Conditions Deprecated
 open Frogger.Modulos
 
 //////////////////////// Modulo initial conditions //////////////////////////////////
-// Inicializamos las posiciones del jugador y de los obstáculos
-let WIDTH : int= 800
-let HEIGHT : int= 600
-
-let external_width : int = 100
-
 let player : Player = { PosX = WIDTH / 2;
                         PosY = Rows.One
                         Width = 40}
@@ -22,9 +20,9 @@ let createObstacle (x_left, x_right, posY, speed, underwater) : Obstacle  =
     if underwater then
         let obstacle: Obstacle = 
             Underwater { x_left = x_left; 
-                         x_right = x_right; 
-                         PosY = posY;
-                         Speed = speed }
+                        x_right = x_right; 
+                        PosY = posY;
+                        Speed = speed }
         obstacle
     else
         let obstacle: Obstacle = 
@@ -126,18 +124,19 @@ let initFondo =
 
 let game: GameState = 
     { Player = player; Final_row = goal_spaces; Score = 0; Lifes = ThreeLives; Fondo = initFondo }
+/////////////////////////////////////////////////////////////////////////////////////
 
 
 // TEST PARA MOVEDOWN
 [<Fact>]
 let ``moveDown Two should return One`` () =
-    let result = Functions.moveDown Rows.Two
+    let result = moveDown Rows.Two
     Assert.Equal(Rows.One, result)
 
 // TEST PARA MOVEUP
 [<Fact>]
 let ``moveUp Two should return Three`` () =
-    let result = Functions.moveUp Rows.Two
+    let result = moveUp Rows.Two
     Assert.Equal(Rows.Three, result)
 
 // TESTS PARA MOVEPLAYER
@@ -489,6 +488,7 @@ let ``border checkNotUpLogTurtle should detect player completely left from log r
 //TEST PARA UPDATELIVES
 [<Fact>]
 let ``UpdateLives should correctly update the number of lives`` () = 
+    
     let gameInit = game
     let gameAfterCollision = {gameInit with Lifes = LivesRemaining.TwoLives; Fondo = {gameInit.Fondo with Time = 60}}
     let gameAfterUpdate = updateLives gameAfterCollision
@@ -533,8 +533,9 @@ let ``updateFondo should move obstacles and change turtle states`` () =
 
 [<Fact>]
 let ``CheckTime should update game state when time is zero`` () =
+    let game2: GameState = { Player = player; Final_row = goal_spaces; Score = 0; Lifes = ThreeLives; Fondo = initFondo }
     // Arrange
-    let gameWithTimeZero = {game with Fondo = {game.Fondo with Time = 0 } }
+    let gameWithTimeZero = {game2 with Fondo = {game.Fondo with Time = 0 } }
     
     // Act
     let updatedGameStateTime = CheckTime gameWithTimeZero
