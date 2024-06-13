@@ -3,8 +3,9 @@ namespace Frogger.Modulos
 open Frogger.Modulos.Module_Player
 open Frogger.Modulos.Module_Grid
 open Frogger.Modulos.Module_Fondo
+open Frogger.Modulos.Module_Interactions
 
-module Module Game =
+module Module_Game =
 
     type GameState =
         {

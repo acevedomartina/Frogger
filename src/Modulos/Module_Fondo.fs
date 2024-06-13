@@ -1,7 +1,9 @@
-namespace Frogger.Modulos.Obstacles
+namespace Frogger.Modulos
+
+open Frogger.Modulos.Module_Grid
 
 module Module_Fondo = 
-    open Frogger.Modulos.Module_Grid
+    
 
     ////////////////////////////////////////// Tipos //////////////////////////////////////////
 

@@ -1,10 +1,9 @@
-namespace Frogger.Modulos.Interactions
+namespace Frogger.Modulos
+open Frogger.Modulos.Module_Grid
+open Frogger.Modulos.Module_Fondo
+open Frogger.Modulos.Module_Player
 
-module Module_Interactions = 
-    open Frogger.Modulos.Module_Grid
-    open Frogger.Modulos.Module_Fondo
-    open Frogger.Modulos.Module_Player
-    
+module Module_Interactions =     
     ////////////////// Funciones de cheque colisión o ahogamiento del jugador en la posición actual /////////////////////////
 
     // Chequeamos que haya colisión entre el jugador y el obstáculo
