@@ -15,15 +15,12 @@ Si el jugador pierde las tres vidas antes de colocar las 5 ranas en sus hogares,
 
 ### Puntaje
  - 10 puntos por cada paso exitoso
- - 50 puntos por cada 
+ - 50 puntos por cada rana que llega a salvo
+ - 1000 puntos si gana!
 
-### ¿Cómo definimos la grilla del juego?
-
-Consideramos que la grilla tiene un tamaño de 600 x 800. Dicha grilla tiene dos espacios por los costados que no se muestran al usuario (len: 100). De este modo, la grilla visible para el jugador es de 600 x 600. A esta grilla la dividimos de manera discreta en el eje vertical y de manera continua en el eje horizontal.
-
-
-### ¿Qué pasa con los obstaculos cuando se pasan de las dimensiones de la pantalla?
-
-Utilizamos condiciones de borde periódicas para que los bordes de los objetos que se pasan de las dimensiones de la pantalla, reaparezcan en el extremo opuesto.
-
-
+### Orden de los programas
+Recomendamos leer los códigos de la carpeta ´Modulos´ en el siguiente orden:
+1. ´Module_Grid´
+2. ´Module_Player´
+3. ´Module_Fondo´
+4. ´Module_Interactions´
