@@ -19,8 +19,8 @@ Si el jugador pierde las tres vidas antes de colocar las 5 ranas en sus hogares,
  - 1000 puntos si gana!
 
 ### Orden de los programas
-Recomendamos leer los códigos de la carpeta ´Modulos´ en el siguiente orden:
-1. ´Module_Grid´
-2. ´Module_Player´
-3. ´Module_Fondo´
-4. ´Module_Interactions´
+Recomendamos leer los códigos de la carpeta `Modulos` en el siguiente orden:
+1. `Module_Grid`
+2. `Module_Player`
+3. `Module_Fondo`
+4. `Module_Interactions`
