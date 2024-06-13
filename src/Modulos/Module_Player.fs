@@ -9,7 +9,7 @@ module Module_Player =
         {
             PosX: int // Posición del centro del jugador
             PosY: Rows // Posición en la fila del jugador
-            Width: int // Ancho en píxeles del jugador
+            Width: int // Ancho del jugador
         }
 
     // Ancho del salto
@@ -30,7 +30,8 @@ module Module_Player =
 
     // FUNCIONES
 
-    let moveUp (posY : Rows) = 
+    // Función que mueve una fila hacia arriba
+    let moveUp (posY : Rows) : Rows= 
         match posY with
         | One -> Two
         | Two -> Three
@@ -44,10 +45,10 @@ module Module_Player =
         | Ten -> Eleven
         | Eleven -> Twelve
         | Twelve -> Thirteen 
-        | _ -> raise (System.Exception("Error no deberia pasar"))
+        | Thirteen -> Thirteen // Como uno no debería poder moverse en la fila 13, se queda en la fila 13
 
     // Función que mueve de una fila hacia la fila de abajo
-    let moveDown (posY : Rows) = 
+    let moveDown (posY : Rows) : Rows= 
         match posY with
         | One -> One
         | Two -> One
@@ -61,7 +62,7 @@ module Module_Player =
         | Ten -> Nine
         | Eleven -> Ten
         | Twelve -> Eleven
-        | _ -> raise (System.Exception("Error no deberia pasar"))
+        | Thirteen -> Thirteen // Como uno no debería poder moverse en la fila 13, se queda en la fila 13
 
     // Función que mueve al jugador en la dirección indicada
     let movePlayer (player : Player) (dir: Direction) : Player = 
@@ -71,6 +72,5 @@ module Module_Player =
                 {player with PosY = newPosY}
         | Down -> let newPosY = moveDown player.PosY
                   {player with PosY = newPosY}
-         // Si se sale de la pantalla jugable no se mueve
         | Left -> if player.PosX - JUMP_WIDTH < WIDTH_PLAYABLE_LEFT then player else {player with PosX = player.PosX - JUMP_WIDTH}
         | Right -> if player.PosX + JUMP_WIDTH > WIDTH_PLAYABLE_RIGHT then player else {player with PosX = player.PosX + JUMP_WIDTH} 

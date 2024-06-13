@@ -8,6 +8,8 @@ open Frogger.Modulos.Module_Game
 
 module Module_Initial_Conditions
 
+// Por alguna razón nunca entendió los tipos de datos de este módulo cuando se corrian los tests. Intentamos usarlo pero no funcionó.
+
 // //////////////////////// Modulo initial conditions //////////////////////////////////
 let player : Player = { PosX = WIDTH / 2;
                         PosY = Rows.One

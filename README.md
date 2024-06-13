@@ -26,4 +26,5 @@ Consideramos que la grilla tiene un tamaño de 600 x 800. Dicha grilla tiene dos
 
 Utilizamos condiciones de borde periódicas para que los bordes de los objetos que se pasan de las dimensiones de la pantalla, reaparezcan en el extremo opuesto.
 
+### Orden de programas 
 
