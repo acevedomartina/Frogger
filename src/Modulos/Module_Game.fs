@@ -1,7 +1,7 @@
 namespace Frogger.Modulos
 
 open Frogger.Modulos.Module_Player
-open Frogger.Modulos.Module_grid
+open Frogger.Modulos.Module_Grid
 open Frogger.Modulos.Module_Fondo
 
 module Module Game =
@@ -15,10 +15,7 @@ module Module Game =
             Fondo: Fondo // Fondo del juego
         }
 
-    
-    //FUNCIONES
-
-    //Funciones que auxiliares para la actualización del juego 
+////////////////// Funciones que auxiliares para la actualización del juego /////////////////////////
 
     // Función que actualiza la cantidad de vidas restantes
     let updateLives (game : GameState) = 
@@ -66,7 +63,7 @@ module Module Game =
         else
             game
 
-    // Funciones que actualizan el estado del juego//
+////////////////// Funciones que actualizan el estado del juego/////////////////////////
 
     // Función que actualiza el estado del juego según una dirección de movimiento o no movimiento
     let updateGameState (game : Result<GameState, string>) (dir : Option<Direction>) : GameState = 
@@ -75,7 +72,8 @@ module Module Game =
                 match dir with
                 | Some d -> let newFondo = updateFondo game.Fondo
                             let newPlayer = movePlayer game.Player d
-                            CheckTime {game with Player = newPlayer; Fondo = newFondo; Score = game.Score+10}
+                            let newScore = game.Score + 10
+                            CheckTime {game with Player = newPlayer; Fondo = newFondo; Score = newScore}
                         
                 | None -> let newFondo = updateFondo game.Fondo
                           CheckTime {game with Fondo = newFondo}
@@ -89,19 +87,16 @@ module Module Game =
         | One | Seven -> match game.Lifes with
                          | GameOver -> Error "Game Over"
                          | _ -> Ok game
-
-        
-        | Two | Three | Four | Five | Six ->   
-
-                                                let obstacles = Map.find PosY obstaculos_lista
+                               
+        | Two | Three | Four | Five | Six ->    let obstacles = Map.find PosY game.Fondo.Obstacles
                                                 let collision = List.exists (checkCollision player) obstacles
                                                 if collision then
                                                     let newGame = updateLives game
-                                                    let newScore = newGame.Score-10
                                                     match newGame.Lifes with
                                                     | GameOver -> Error "Game Over"
                                                     | _ -> let newPlayer = {player with PosX = WIDTH/2; PosY = Rows.One}
-                                                           Ok {newGame with Player = newPlayer; Score  = newScore}
+                                                           let newScore = newGame.Score - 10
+                                                           Ok {newGame with Player = newPlayer; Score = newScore}
                                                 else
                                                     Ok game
 
