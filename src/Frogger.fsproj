@@ -5,8 +5,11 @@
   </PropertyGroup>
   
   <ItemGroup>
-    <Compile Include="Modulos\Types.fs" />
-    <Compile Include="Modulos\Functions.fsx" />
+    <Compile Include="Modulos\Module_Grid.fs" />
+    <Compile Include="Modulos\Module_Player.fs" />
+    <Compile Include="Modulos\Module_Fondo.fs" />
+    <Compile Include="Modulos\Module_Interactions.fs" />
+    <Compile Include="Modulos\Module_Game.fs" />
   </ItemGroup>
 
   <ItemGroup>
