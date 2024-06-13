@@ -14,7 +14,8 @@ Inicialmente, el jugador consta con 3 vidas, las cuales puede perder a lo largo 
 Si el jugador pierde las tres vidas antes de colocar las 5 ranas en sus hogares, pierde el juego. ¡De lo contrario, gana!
 
 ### Puntaje
-
+ - 10 puntos por cada paso exitoso
+ - 50 puntos por cada 
 
 ### ¿Cómo definimos la grilla del juego?
 
