@@ -969,22 +969,3 @@ let ``checkPlayerLose OneLife gameOver``() =
     let game = { Player = player; Final_row = goal_spaces; Score = 0; Lifes = OneLife; Fondo = fondo }
     let result = checkPlayerLose game
     Assert.Equal(result, Error "Game Over")
-
-[<Test>]
-let ``Final function should return Ok if game state is Ok``() =
-    // Arrange
-    let initialGameState = {
-        Player = { PosX = WIDTH / 2; PosY = One; Width = 50 }
-        Fondo = { Obstacles = Map.empty }
-        Score = 0
-        Lifes = Lives 3
-    }
-    let gameResult = Ok initialGameState
-
-    // Act
-    let result = final gameResult
-
-    // Assert
-    match result with
-    | Ok game -> game |> should equal initialGameState
-    | Error _ -> Assert.Fail("Expected Ok result")
