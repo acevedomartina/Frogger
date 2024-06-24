@@ -1,11 +1,11 @@
 namespace Frogger.Modulos
 
-open Frogger.Modulos.Module_Player
-open Frogger.Modulos.Module_Grid
-open Frogger.Modulos.Module_Fondo
-open Frogger.Modulos.Module_Interactions
+open Frogger.Modulos.Player
+open Frogger.Modulos.Grid
+open Frogger.Modulos.Fondo
+open Frogger.Modulos.Interactions
 
-module Module_Game =
+module Game =
 ////////////////// Tipo principal del estado de juego /////////////////////////
 
     type GameState =
@@ -67,7 +67,12 @@ module Module_Game =
     let CheckWin (game : GameState) : GameState = 
         if List.forall (fun goal -> goal.Ocupation) game.Final_row then
             let newFinalRow = List.map (fun goal -> { goal with Ocupation = false }) game.Final_row
-            {game with Score = game.Score + FILL_ALL_GOALS; Lifes = ThreeLives; Player = { PosX = WIDTH/2; PosY = One; Width = game.Player.Width }; Final_row = newFinalRow}
+            let nextPlayer = { PosX = WIDTH/2; PosY = One; Width = game.Player.Width }
+            {game with 
+                    Score = game.Score + FILL_ALL_GOALS
+                    Lifes = ThreeLives 
+                    Player = nextPlayer
+                    Final_row = newFinalRow}
         else
             game
 
@@ -87,6 +92,14 @@ module Module_Game =
                           CheckTime {game with Fondo = newFondo}
             | Error e -> raise (System.Exception(e))
 
+    // Función que actualiza el estado del juego si el jugador perdió una vida
+    let nextGame (game : GameState) =
+      match game.Lifes with
+              | GameOver -> Error "Game Over"
+              | _ ->  let newPlayer = {game.Player with PosX = WIDTH/2; PosY = Rows.One}
+                      let newScore = game.Score - CORRECT_MOVEMENT
+                      Ok {game with Player = newPlayer; Score = newScore}
+
     // Función que chequea si el jugador perdió una vida o si se acabó el juego, dado que damos diez puntos por cada paso correcto lo restamos si es que el movimiento fue incorrecto
     let checkPlayerLose (game : GameState) : Result<GameState, string>=
         let player = game.Player
@@ -99,13 +112,9 @@ module Module_Game =
         // Si el jugador está en la fila 2, 3, 4, 5, 6 chequeamos que no haya colisión con los obstáculos de la calle
         | Two | Three | Four | Five | Six ->    let obstacles = Map.find PosY game.Fondo.Obstacles
                                                 let collision = List.exists (checkCollision player) obstacles
-                                                if collision then
+                                                if collision then                                                    
                                                     let newGame = updateLives game
-                                                    match newGame.Lifes with
-                                                    | GameOver -> Error "Game Over"
-                                                    | _ -> let newPlayer = {player with PosX = WIDTH/2; PosY = Rows.One}
-                                                           let newScore = newGame.Score - CORRECT_MOVEMENT
-                                                           Ok {newGame with Player = newPlayer; Score = newScore}
+                                                    nextGame newGame
                                                 else
                                                     Ok game
         // Si el jugador está en la fila 8, 9, 10, 11, 12 chequeamos que no esté arriba de un tronco o una tortuga o sea que se ahogue
@@ -114,11 +123,7 @@ module Module_Game =
                                                     let drown = List.forall (fun x -> x) lista
                                                     if drown then
                                                         let newGame = updateLives game
-                                                        match newGame.Lifes with
-                                                            | GameOver -> Error "Game Over"
-                                                            | _ ->  let newPlayer = {player with PosX = WIDTH/2; PosY = Rows.One}
-                                                                    let newScore = newGame.Score - CORRECT_MOVEMENT
-                                                                    Ok {newGame with Player = newPlayer; Score = newScore}
+                                                        nextGame newGame
                                                     else
                                                         Ok game 
         // Si el jugador está en la fila 13, chequeamos si llegó a la meta o si justo perdió una vida o si ganó el juego

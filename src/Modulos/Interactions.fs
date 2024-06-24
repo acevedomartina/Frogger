@@ -1,9 +1,9 @@
 namespace Frogger.Modulos
-open Frogger.Modulos.Module_Grid
-open Frogger.Modulos.Module_Fondo
-open Frogger.Modulos.Module_Player
+open Frogger.Modulos.Grid
+open Frogger.Modulos.Fondo
+open Frogger.Modulos.Player
 
-module Module_Interactions =     
+module Interactions =     
     ////////////////// Funciones de chequeo de colisión o ahogo del jugador en la posición actual /////////////////////////
 
     // Chequeamos que haya colisión entre el jugador y el obstáculo
@@ -11,8 +11,8 @@ module Module_Interactions =
         // No nos interesa si el obstáculo está arriba o abajo del agua, solo si hay colisión
         let obstacle = matchObstacle obstacleU
         // Si choca por la izquierda o por la derecha
-        let collisionL = player.PosX + player.Width/2 >= obstacle.x_left && player.PosX + player.Width/2 <= obstacle.x_right
-        let collisionR = player.PosX - player.Width/2 >= obstacle.x_left && player.PosX - player.Width/2 <= obstacle.x_right
+        let collisionL = playerRight player >= obstacle.x_left && playerRight player <= obstacle.x_right
+        let collisionR = playerLeft player >= obstacle.x_left && playerLeft player <= obstacle.x_right
         collisionL || collisionR
 
     // Chequeo si el jugador no está arriba de un tronco o una tortuga
@@ -22,7 +22,7 @@ module Module_Interactions =
         | Afloat obstacle -> if obstacle.x_left > obstacle.x_right then
                                 // Si el extremo derecho del jugador está a la derecha del obstáculo me ahogo entonces devuelve true
                                 // En caso contrario no me ahogo y devuelve false
-                                (obstacle.x_right < player.PosX + player.Width / 2) && (obstacle.x_left > player.PosX - player.Width / 2)
+                                (obstacle.x_right < playerRight player) && (obstacle.x_left > playerLeft player)
                              else 
-                                (obstacle.x_left > player.PosX - player.Width / 2) || (obstacle.x_right < player.PosX + player.Width / 2)
+                                (obstacle.x_left > playerLeft player) || (obstacle.x_right < playerRight player)
         | Underwater obstacle -> true

@@ -1,6 +1,6 @@
 namespace Frogger.Modulos
 
-module Module_Grid = 
+module Grid = 
     // Tipo que define las filas discretas del juego
     type Rows = 
     | One

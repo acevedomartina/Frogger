@@ -5,11 +5,11 @@
   </PropertyGroup>
   
   <ItemGroup>
-    <Compile Include="Modulos\Module_Grid.fs" />
-    <Compile Include="Modulos\Module_Player.fs" />
-    <Compile Include="Modulos\Module_Fondo.fs" />
-    <Compile Include="Modulos\Module_Interactions.fs" />
-    <Compile Include="Modulos\Module_Game.fs" />
+    <Compile Include="Modulos\Grid.fs" />
+    <Compile Include="Modulos\Player.fs" />
+    <Compile Include="Modulos\Fondo.fs" />
+    <Compile Include="Modulos\Interactions.fs" />
+    <Compile Include="Modulos\Game.fs" />
   </ItemGroup>
 
   <ItemGroup>

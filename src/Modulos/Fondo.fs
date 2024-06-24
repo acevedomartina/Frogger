@@ -1,8 +1,8 @@
 namespace Frogger.Modulos
 
-open Frogger.Modulos.Module_Grid
+open Frogger.Modulos.Grid
 
-module Module_Fondo = 
+module Fondo = 
 
     ////////////////////////////////////////// Tipos //////////////////////////////////////////
     
@@ -72,10 +72,23 @@ module Module_Fondo =
         
         // Cambiamos el estado de las tortugas en las filas 8 y 11 cada 10 segundos
         let idx = 1 // Como hay dos y tres tortugas en las filas 8 y 11 respectivamente cambiamos el estado de la segunda tortuga en cada fila
-        // Tomamos el mapa de Rows, Obstacle list
-        // A cada lista de obstáculos extraemos los valoes key y lst
-        // A la lista lst le aplicamos un map en donde si la key es Rows.Eight o Rows.Eleven entonces cambiamos el estado de la tortuga idx-ésima
-        // En caso contrario devolvemos el obstáculo
-        let updatedObstacles = movedObstacles |> Map.map (fun k lst -> lst |> List.mapi (fun j obs -> if (k = Rows.Eight || k = Rows.Eleven) && j = idx then changeTurtleState fondo.Time obs else obs))
+        
+        // Función que actualiza el estado de las tortugas en una fila dada para el elemento idx de la fila
+        let updateTurtles row =
+            row
+            |> List.mapi (fun j obs -> if  j = idx then
+                                            changeTurtleState fondo.Time obs
+                                        else
+                                            obs)
+        // Actualizamos el estado de las tortugas en las filas 8 y 11
+        let newRow8 = movedObstacles[Eight] |> updateTurtles
+        let newRow11 = movedObstacles[Eleven] |> updateTurtles
+
+        // Actualizamos el mapa de obstáculos
+        let updatedObstacles =
+            movedObstacles
+            |> Map.add Eight newRow8
+            |> Map.add Eleven newRow11
+
         // Devolvemos el fondo actualizado
         {fondo with Obstacles = updatedObstacles; Time = fondo.Time - 1}

@@ -1,8 +1,8 @@
 namespace Frogger.Modulos
 
-open Frogger.Modulos.Module_Grid
+open Frogger.Modulos.Grid
 
-module Module_Player =
+module Player =
 
     // Tipo que define al jugador
     type Player =
@@ -64,6 +64,10 @@ module Module_Player =
         | Twelve -> Eleven
         | Thirteen -> Thirteen // Como uno no debería poder moverse en la fila 13, se queda en la fila 13
 
+    // Funciones que devuelven los extremos del jugador
+    let playerRight player = player.PosX + player.Width / 2
+    let playerLeft player = player.PosX - player.Width / 2
+
     // Función que mueve al jugador en la dirección indicada
     let movePlayer (player : Player) (dir: Direction) : Player = 
         match dir with
@@ -72,5 +76,13 @@ module Module_Player =
                 {player with PosY = newPosY}
         | Down -> let newPosY = moveDown player.PosY
                   {player with PosY = newPosY}
-        | Left -> if player.PosX - JUMP_WIDTH < WIDTH_PLAYABLE_LEFT then player else {player with PosX = player.PosX - JUMP_WIDTH}
-        | Right -> if player.PosX + JUMP_WIDTH > WIDTH_PLAYABLE_RIGHT then player else {player with PosX = player.PosX + JUMP_WIDTH} 
+        | Left -> let nextPosX = player.PosX - JUMP_WIDTH
+                  if nextPosX < WIDTH_PLAYABLE_LEFT then
+                      player
+                  else
+                      {player with PosX = nextPosX}
+        | Right -> let nextPosX = player.PosX + JUMP_WIDTH
+                   if nextPosX > WIDTH_PLAYABLE_RIGHT then
+                       player
+                   else
+                       {player with PosX = nextPosX}

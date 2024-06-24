@@ -1,12 +1,12 @@
 namespace Frogger.Modulos
 
-open Frogger.Modulos.Module_Grid
-open Frogger.Modulos.Module_Player
-open Frogger.Modulos.Module_Fondo
-open Frogger.Modulos.Module_Interactions
-open Frogger.Modulos.Module_Game
+open Frogger.Modulos.Grid
+open Frogger.Modulos.Player
+open Frogger.Modulos.Fondo
+open Frogger.Modulos.Interactions
+open Frogger.Modulos.Game
 
-module Module_Initial_Conditions
+module Initial_Conditions
 
 // Por alguna razón nunca entendió los tipos de datos de este módulo cuando se corrian los tests. Intentamos usarlo pero no funcionó.
 

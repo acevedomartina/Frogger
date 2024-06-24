@@ -1,8 +1,8 @@
 {
   "version": 2,
-  "dgSpecHash": "Lam6jiNQWiDLwIAzpZGRAv8Dz5v+Fw80SXunnuI4zTulaAHnJ8hliVC4GxiZULbZe3mmeAbcQVxwM7S630rJqg==",
+  "dgSpecHash": "jzcUQfPcupzrSLEZC92NJoEtN7Vn0IIaMDFApTNCxOUiYDC+EUiIBDMaqEifMd2VWqajlRGlqDgArVApTxj6Eg==",
   "success": true,
-  "projectFilePath": "C:\\Users\\Propietario\\Desktop\\ib\\5-Maestría\\Programación Avanzada\\Frogger\\Test\\Test.fsproj",
+  "projectFilePath": "C:\\Users\\Propietario\\OneDrive\\Escritorio\\ib\\5-Maestría\\Programación Avanzada\\Frogger\\Test\\Test.fsproj",
   "expectedPackageFiles": [
     "C:\\Users\\Propietario\\.nuget\\packages\\coverlet.collector\\6.0.0\\coverlet.collector.6.0.0.nupkg.sha512",
     "C:\\Users\\Propietario\\.nuget\\packages\\fsharp.core\\8.0.200\\fsharp.core.8.0.200.nupkg.sha512",

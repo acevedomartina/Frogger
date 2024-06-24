@@ -1,11 +1,11 @@
 module Tests
 
 open Xunit
-open Frogger.Modulos.Module_Grid
-open Frogger.Modulos.Module_Fondo
-open Frogger.Modulos.Module_Player
-open Frogger.Modulos.Module_Interactions
-open Frogger.Modulos.Module_Game
+open Frogger.Modulos.Grid
+open Frogger.Modulos.Fondo
+open Frogger.Modulos.Player
+open Frogger.Modulos.Interactions
+open Frogger.Modulos.Game
 // open Frogger.Modulos.Module_Initial_Conditions Deprecated
 open Frogger.Modulos
 
