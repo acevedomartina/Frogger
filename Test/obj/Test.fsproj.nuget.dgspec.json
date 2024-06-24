@@ -1,20 +1,20 @@
 {
   "format": 1,
   "restore": {
-    "C:\\Users\\Martina\\Desktop\\Nuevo_frog\\Frogger\\Test\\Test.fsproj": {}
+    "C:\\Users\\Propietario\\OneDrive\\Escritorio\\ib\\5-Maestría\\Programación Avanzada\\Frogger\\Test\\Test.fsproj": {}
   },
   "projects": {
-    "C:\\Users\\Martina\\Desktop\\Nuevo_frog\\Frogger\\src\\Frogger.fsproj": {
+    "C:\\Users\\Propietario\\OneDrive\\Escritorio\\ib\\5-Maestría\\Programación Avanzada\\Frogger\\src\\Frogger.fsproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "C:\\Users\\Martina\\Desktop\\Nuevo_frog\\Frogger\\src\\Frogger.fsproj",
+        "projectUniqueName": "C:\\Users\\Propietario\\OneDrive\\Escritorio\\ib\\5-Maestría\\Programación Avanzada\\Frogger\\src\\Frogger.fsproj",
         "projectName": "Frogger",
-        "projectPath": "C:\\Users\\Martina\\Desktop\\Nuevo_frog\\Frogger\\src\\Frogger.fsproj",
-        "packagesPath": "C:\\Users\\Martina\\.nuget\\packages\\",
-        "outputPath": "C:\\Users\\Martina\\Desktop\\Nuevo_frog\\Frogger\\src\\obj\\",
+        "projectPath": "C:\\Users\\Propietario\\OneDrive\\Escritorio\\ib\\5-Maestría\\Programación Avanzada\\Frogger\\src\\Frogger.fsproj",
+        "packagesPath": "C:\\Users\\Propietario\\.nuget\\packages\\",
+        "outputPath": "C:\\Users\\Propietario\\OneDrive\\Escritorio\\ib\\5-Maestría\\Programación Avanzada\\Frogger\\src\\obj\\",
         "projectStyle": "PackageReference",
         "configFilePaths": [
-          "C:\\Users\\Martina\\AppData\\Roaming\\NuGet\\NuGet.Config"
+          "C:\\Users\\Propietario\\AppData\\Roaming\\NuGet\\NuGet.Config"
         ],
         "originalTargetFrameworks": [
           "net8.0"
@@ -71,17 +71,17 @@
         }
       }
     },
-    "C:\\Users\\Martina\\Desktop\\Nuevo_frog\\Frogger\\Test\\Test.fsproj": {
+    "C:\\Users\\Propietario\\OneDrive\\Escritorio\\ib\\5-Maestría\\Programación Avanzada\\Frogger\\Test\\Test.fsproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "C:\\Users\\Martina\\Desktop\\Nuevo_frog\\Frogger\\Test\\Test.fsproj",
+        "projectUniqueName": "C:\\Users\\Propietario\\OneDrive\\Escritorio\\ib\\5-Maestría\\Programación Avanzada\\Frogger\\Test\\Test.fsproj",
         "projectName": "Test",
-        "projectPath": "C:\\Users\\Martina\\Desktop\\Nuevo_frog\\Frogger\\Test\\Test.fsproj",
-        "packagesPath": "C:\\Users\\Martina\\.nuget\\packages\\",
-        "outputPath": "C:\\Users\\Martina\\Desktop\\Nuevo_frog\\Frogger\\Test\\obj\\",
+        "projectPath": "C:\\Users\\Propietario\\OneDrive\\Escritorio\\ib\\5-Maestría\\Programación Avanzada\\Frogger\\Test\\Test.fsproj",
+        "packagesPath": "C:\\Users\\Propietario\\.nuget\\packages\\",
+        "outputPath": "C:\\Users\\Propietario\\OneDrive\\Escritorio\\ib\\5-Maestría\\Programación Avanzada\\Frogger\\Test\\obj\\",
         "projectStyle": "PackageReference",
         "configFilePaths": [
-          "C:\\Users\\Martina\\AppData\\Roaming\\NuGet\\NuGet.Config"
+          "C:\\Users\\Propietario\\AppData\\Roaming\\NuGet\\NuGet.Config"
         ],
         "originalTargetFrameworks": [
           "net8.0"
@@ -94,8 +94,8 @@
           "net8.0": {
             "targetAlias": "net8.0",
             "projectReferences": {
-              "C:\\Users\\Martina\\Desktop\\Nuevo_frog\\Frogger\\src\\Frogger.fsproj": {
-                "projectPath": "C:\\Users\\Martina\\Desktop\\Nuevo_frog\\Frogger\\src\\Frogger.fsproj"
+              "C:\\Users\\Propietario\\OneDrive\\Escritorio\\ib\\5-Maestría\\Programación Avanzada\\Frogger\\src\\Frogger.fsproj": {
+                "projectPath": "C:\\Users\\Propietario\\OneDrive\\Escritorio\\ib\\5-Maestría\\Programación Avanzada\\Frogger\\src\\Frogger.fsproj"
               }
             }
           }

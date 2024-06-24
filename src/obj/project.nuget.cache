@@ -1,17 +1,17 @@
 {
   "version": 2,
-  "dgSpecHash": "RYYCwhMNZKbaH9rpPwPX+fvBjpd6HiF4ICVxZSIh8Oc0QJP/2fzKOhCZyHIcGnRLcc9ISyp8k65s+8NXThwsxA==",
+  "dgSpecHash": "CDAuibzXvKfuA9AT9fv7erO+vb/Kddb+LNQzDr8zu3X2KF9yAmEpQbfcuK5cZzc+/uNPfkpQ2nxFd08zK+drfg==",
   "success": true,
-  "projectFilePath": "C:\\Users\\Martina\\Desktop\\Nuevo_frog\\Frogger\\src\\Frogger.fsproj",
+  "projectFilePath": "C:\\Users\\Propietario\\OneDrive\\Escritorio\\ib\\5-Maestría\\Programación Avanzada\\Frogger\\src\\Frogger.fsproj",
   "expectedPackageFiles": [
-    "C:\\Users\\Martina\\.nuget\\packages\\fsharp.core\\8.0.200\\fsharp.core.8.0.200.nupkg.sha512",
-    "C:\\Users\\Martina\\.nuget\\packages\\xunit\\2.8.1\\xunit.2.8.1.nupkg.sha512",
-    "C:\\Users\\Martina\\.nuget\\packages\\xunit.abstractions\\2.0.3\\xunit.abstractions.2.0.3.nupkg.sha512",
-    "C:\\Users\\Martina\\.nuget\\packages\\xunit.analyzers\\1.14.0\\xunit.analyzers.1.14.0.nupkg.sha512",
-    "C:\\Users\\Martina\\.nuget\\packages\\xunit.assert\\2.8.1\\xunit.assert.2.8.1.nupkg.sha512",
-    "C:\\Users\\Martina\\.nuget\\packages\\xunit.core\\2.8.1\\xunit.core.2.8.1.nupkg.sha512",
-    "C:\\Users\\Martina\\.nuget\\packages\\xunit.extensibility.core\\2.8.1\\xunit.extensibility.core.2.8.1.nupkg.sha512",
-    "C:\\Users\\Martina\\.nuget\\packages\\xunit.extensibility.execution\\2.8.1\\xunit.extensibility.execution.2.8.1.nupkg.sha512"
+    "C:\\Users\\Propietario\\.nuget\\packages\\fsharp.core\\8.0.200\\fsharp.core.8.0.200.nupkg.sha512",
+    "C:\\Users\\Propietario\\.nuget\\packages\\xunit\\2.8.1\\xunit.2.8.1.nupkg.sha512",
+    "C:\\Users\\Propietario\\.nuget\\packages\\xunit.abstractions\\2.0.3\\xunit.abstractions.2.0.3.nupkg.sha512",
+    "C:\\Users\\Propietario\\.nuget\\packages\\xunit.analyzers\\1.14.0\\xunit.analyzers.1.14.0.nupkg.sha512",
+    "C:\\Users\\Propietario\\.nuget\\packages\\xunit.assert\\2.8.1\\xunit.assert.2.8.1.nupkg.sha512",
+    "C:\\Users\\Propietario\\.nuget\\packages\\xunit.core\\2.8.1\\xunit.core.2.8.1.nupkg.sha512",
+    "C:\\Users\\Propietario\\.nuget\\packages\\xunit.extensibility.core\\2.8.1\\xunit.extensibility.core.2.8.1.nupkg.sha512",
+    "C:\\Users\\Propietario\\.nuget\\packages\\xunit.extensibility.execution\\2.8.1\\xunit.extensibility.execution.2.8.1.nupkg.sha512"
   ],
   "logs": []
 }
