@@ -44,9 +44,7 @@ module Game =
     
     // Función que chequea si el jugador llegó a alguna meta, debe entrar por completo en el espacio de meta
     let CheckWinAux (player : Player) (goal_space : GoalSpace) : GoalSpace = 
-        let player_xright = player.PosX + player.Width / 2
-        let player_xleft = player.PosX - player.Width / 2
-        if player_xleft > goal_space.PosX && player_xright < goal_space.PosX + goal_space.Width then
+        if playerLeft player > goal_space.PosX && playerRight player < goal_space.PosX + goal_space.Width then
             { goal_space with Ocupation = true }          
         else
             { goal_space with Ocupation = false }
